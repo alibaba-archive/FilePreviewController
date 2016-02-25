@@ -70,7 +70,7 @@ public protocol FilePreviewControllerDelegate: NSObjectProtocol {
     func previewController(controller: FilePreviewController, failedToLoadRemotePreviewItem item:QLPreviewItem, error: NSError)
 }
 
-public class FilePreviewController: QLPreviewController, QLPreviewControllerDataSource {
+public class FilePreviewController: QLPreviewController {
     
     /// if header is not nil, Alamofire will use it for authentication
     public var headers: [String: String]?

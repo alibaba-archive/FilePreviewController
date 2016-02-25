@@ -13,6 +13,7 @@
 		4A6BC7931C76F8C500DACDA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A6BC7921C76F8C500DACDA5 /* Assets.xcassets */; };
 		4A6BC7961C76F8C500DACDA5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A6BC7941C76F8C500DACDA5 /* LaunchScreen.storyboard */; };
 		4A725BBA1C7D947800244964 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A725BB91C7D947800244964 /* Alamofire.framework */; };
+		4AA21F061C7F13B5009727EA /* FilePreviewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AA21F051C7F13B5009727EA /* FilePreviewController.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +25,7 @@
 		4A6BC7951C76F8C500DACDA5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4A6BC7971C76F8C500DACDA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A725BB91C7D947800244964 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		4AA21F051C7F13B5009727EA /* FilePreviewController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FilePreviewController.framework; path = "../../Library/Developer/Xcode/DerivedData/FilePreviewController-gzrxyhyxyosyhkczrlegnnoesfea/Build/Products/Debug-iphoneos/FilePreviewController.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +34,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A725BBA1C7D947800244964 /* Alamofire.framework in Frameworks */,
+				4AA21F061C7F13B5009727EA /* FilePreviewController.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +44,7 @@
 		4A6BC77F1C76F8C500DACDA5 = {
 			isa = PBXGroup;
 			children = (
+				4AA21F051C7F13B5009727EA /* FilePreviewController.framework */,
 				4A725BB91C7D947800244964 /* Alamofire.framework */,
 				4A6BC78A1C76F8C500DACDA5 /* Demo */,
 				4A6BC7891C76F8C500DACDA5 /* Products */,
