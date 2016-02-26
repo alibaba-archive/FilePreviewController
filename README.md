@@ -4,7 +4,7 @@ Enpand QLPreviewController to support remote file preview. Use Alamofire as a de
 ## Installation
 
 ### Carthage
-To integrate Kingfisher into your Xcode project using Carthage, specify it in your `Cartfile`:
+To integrate FilePreviewController into your Xcode project using Carthage, specify it in your `Cartfile`:
 
 ``` bash
 $ github "teambition/FilePreviewController"
