@@ -24,13 +24,13 @@ public extension String {
     }
 }
 
-func localFilePathFor(URL: NSURL, fileExtension: String? = nil) -> String {
+func localFilePathFor(URL: NSURL, fileExtension: String? = nil) -> String? {
     
     let fileType = fileExtension ?? URL.pathExtension
     let hashedURL = URL.absoluteString.MD5()
     
     guard var cacheDirectory = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true).last else {
-        fatalError("fail to get local cache directory")
+        return nil
     }
     cacheDirectory = cacheDirectory.stringByAppendingPathComponent("com.teambition.RemoteQuickLook")
     var isDirectory: ObjCBool = false
@@ -38,7 +38,7 @@ func localFilePathFor(URL: NSURL, fileExtension: String? = nil) -> String {
         do {
             try NSFileManager.defaultManager().createDirectoryAtPath(cacheDirectory, withIntermediateDirectories: true, attributes: nil)
         } catch _{
-            fatalError("fail to create cache directory")
+            return nil
         }
     }
     cacheDirectory = cacheDirectory.stringByAppendingPathComponent(hashedURL)
@@ -106,7 +106,13 @@ extension FilePreviewController {
     func downloadFor(item: FilePreviewItem) {
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        let localFilePath = localFilePathFor(item.previewItemURL, fileExtension: item.fileExtension)
+        guard let localFilePath = localFilePathFor(item.previewItemURL, fileExtension: item.fileExtension) else {
+            if let controllerDelegate = self.controllerDelegate {
+                let error = Error.errorWithCode(.LocalCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")
+                controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: item, error: error)
+            }
+            return
+        }
         
         download(.GET, item.previewItemURL.absoluteString, parameters: nil, encoding:.URL, headers: headers) { (temporaryURL, response) -> NSURL in
             
@@ -122,7 +128,8 @@ extension FilePreviewController {
                 self.cancelProgress()
                 if let error = error {
                     if let controllerDelegate = self.controllerDelegate {
-                        controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: item, error: error)
+                        let rasieError = Error.errorWithCode(.RemoteFileDownloadFailed, failureReason: "Download remote file failed", error: error)
+                        controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: item, error: rasieError)
                     }
                 } else {
                     self.refreshCurrentPreviewItem()
@@ -191,13 +198,7 @@ extension FilePreviewController: QLPreviewControllerDataSource {
     //This method is required to expose, don't call it
     public func previewController(controller: QLPreviewController, previewItemAtIndex index: Int) -> QLPreviewItem {
         
-        guard let originalDataSource = originalDataSource else {
-            fatalError("no datasource specified")
-        }
-        
-        guard let originalPreviewItem = (originalDataSource.previewController(controller, previewItemAtIndex: index)) as? FilePreviewItem else {
-            fatalError("no original preview item")
-        }
+        let originalPreviewItem = (originalDataSource!.previewController(controller, previewItemAtIndex: index)) as! FilePreviewItem
         
         if originalPreviewItem.previewItemURL.isFileReferenceURL() {
             return originalPreviewItem
@@ -212,7 +213,14 @@ extension FilePreviewController: QLPreviewControllerDataSource {
             copyItem = FilePreviewItem(previewItemURL: originalPreviewItem.previewItemURL)
         }
         
-        let localFilePath = localFilePathFor(originalPreviewItem.previewItemURL, fileExtension: originalPreviewItem.fileExtension)
+        guard let localFilePath = localFilePathFor(originalPreviewItem.previewItemURL, fileExtension: originalPreviewItem.fileExtension) else {
+            //failed to get local file path
+            if let controllerDelegate = self.controllerDelegate {
+                let error = Error.errorWithCode(.LocalCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")
+                controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: originalPreviewItem, error: error)
+            }
+            return originalPreviewItem
+        }
         copyItem.previewItemURL = NSURL.fileURLWithPath(localFilePath)
         
         if NSFileManager.defaultManager().fileExistsAtPath(localFilePath) {

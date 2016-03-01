@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A098D4B1C85960E0067270D /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A098D4A1C85960E0067270D /* Error.swift */; };
 		4A6BC7781C76F89300DACDA5 /* FilePreviewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A6BC7771C76F89300DACDA5 /* FilePreviewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4A725BB81C7D940C00244964 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A725BB71C7D940C00244964 /* Alamofire.framework */; };
 		4A98E29E1C7AD4F500D435BC /* FilePreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A98E29D1C7AD4F500D435BC /* FilePreviewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		4A098D4A1C85960E0067270D /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Error.swift; sourceTree = "<group>"; };
 		4A6BC7741C76F89300DACDA5 /* FilePreviewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FilePreviewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A6BC7771C76F89300DACDA5 /* FilePreviewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilePreviewController.h; sourceTree = "<group>"; };
 		4A6BC7791C76F89300DACDA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -61,6 +63,7 @@
 				4A6BC7771C76F89300DACDA5 /* FilePreviewController.h */,
 				4A98E29D1C7AD4F500D435BC /* FilePreviewController.swift */,
 				4AA21F031C7EF2F2009727EA /* SingleFilePreviewController.swift */,
+				4A098D4A1C85960E0067270D /* Error.swift */,
 				4A98E2A31C7AD94700D435BC /* NSString+MD5.h */,
 				4A98E2A41C7AD94700D435BC /* NSString+MD5.m */,
 				4A6BC7791C76F89300DACDA5 /* Info.plist */,
@@ -147,6 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A098D4B1C85960E0067270D /* Error.swift in Sources */,
 				4AA21F041C7EF2F2009727EA /* SingleFilePreviewController.swift in Sources */,
 				4A98E2A61C7AD94700D435BC /* NSString+MD5.m in Sources */,
 				4A98E29E1C7AD4F500D435BC /* FilePreviewController.swift in Sources */,

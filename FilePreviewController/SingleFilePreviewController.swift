@@ -115,6 +115,10 @@ extension SingleFilePreviewController: QLPreviewControllerDataSource, FilePrevie
     
     //This method is required to expose, don't call it
     public func previewController(controller: FilePreviewController, failedToLoadRemotePreviewItem item: QLPreviewItem, error: NSError) {
-        print("failed to load item")
+        let alertController = UIAlertController(title: "Failed To Open File", message: error.localizedDescription, preferredStyle: .Alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+        presentViewController(alertController, animated: true) { () -> Void in
+            self.navigationController?.popViewControllerAnimated(true)
+        }
     }
 }
