@@ -82,20 +82,34 @@ extension SingleFilePreviewController {
         }
         
         let flexSpace = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil)
+        let fixedSpace = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: self, action: nil)
+        fixedSpace.width = 72
+        
         var itemsArray = [UIBarButtonItem]()
-        if items.count == 1, let first = items.first {
-            itemsArray = [flexSpace, first, flexSpace]
-        } else if items.count == 2, let first = items.first, let last = items.last {
-            itemsArray = [flexSpace, first, flexSpace, flexSpace, last, flexSpace]
-        } else {
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            itemsArray.append(flexSpace)
             for item in items {
                 itemsArray.append(item)
-                itemsArray.append(flexSpace)
+                itemsArray.append(fixedSpace)
             }
-            if itemsArray.count > 0 {
-                itemsArray.removeLast()
+            itemsArray.removeLast()
+            itemsArray.append(flexSpace)
+        } else {
+            if items.count == 1, let first = items.first {
+                itemsArray = [flexSpace, first, flexSpace]
+            } else if items.count == 2, let first = items.first, let last = items.last {
+                itemsArray = [flexSpace, first, flexSpace, flexSpace, last, flexSpace]
+            } else {
+                for item in items {
+                    itemsArray.append(item)
+                    itemsArray.append(flexSpace)
+                }
+                if itemsArray.count > 0 {
+                    itemsArray.removeLast()
+                }
             }
         }
+        
         toolbar.setItems(itemsArray, animated: false)
         toolbar.tintColor = UIColor.whiteColor()
     }
