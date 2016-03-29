@@ -10,6 +10,9 @@
 		4A098D4B1C85960E0067270D /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A098D4A1C85960E0067270D /* Error.swift */; };
 		4A6BC7781C76F89300DACDA5 /* FilePreviewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A6BC7771C76F89300DACDA5 /* FilePreviewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4A725BB81C7D940C00244964 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A725BB71C7D940C00244964 /* Alamofire.framework */; };
+		4A783B911CA9100200B49092 /* FPAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A783B901CA9100200B49092 /* FPAnimation.swift */; };
+		4A783B931CAA29BC00B49092 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A783B921CAA29BC00B49092 /* Images.xcassets */; };
+		4A783B9A1CAA49E100B49092 /* FPCustomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A783B991CAA49E100B49092 /* FPCustomView.swift */; };
 		4A98E29E1C7AD4F500D435BC /* FilePreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A98E29D1C7AD4F500D435BC /* FilePreviewController.swift */; };
 		4A98E2A51C7AD94700D435BC /* NSString+MD5.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A98E2A31C7AD94700D435BC /* NSString+MD5.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4A98E2A61C7AD94700D435BC /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A98E2A41C7AD94700D435BC /* NSString+MD5.m */; };
@@ -22,6 +25,9 @@
 		4A6BC7771C76F89300DACDA5 /* FilePreviewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilePreviewController.h; sourceTree = "<group>"; };
 		4A6BC7791C76F89300DACDA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A725BB71C7D940C00244964 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		4A783B901CA9100200B49092 /* FPAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FPAnimation.swift; sourceTree = "<group>"; };
+		4A783B921CAA29BC00B49092 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4A783B991CAA49E100B49092 /* FPCustomView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FPCustomView.swift; sourceTree = "<group>"; };
 		4A98E29D1C7AD4F500D435BC /* FilePreviewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FilePreviewController.swift; sourceTree = "<group>"; };
 		4A98E2A31C7AD94700D435BC /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
 		4A98E2A41C7AD94700D435BC /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
@@ -63,10 +69,13 @@
 				4A6BC7771C76F89300DACDA5 /* FilePreviewController.h */,
 				4A98E29D1C7AD4F500D435BC /* FilePreviewController.swift */,
 				4AA21F031C7EF2F2009727EA /* SingleFilePreviewController.swift */,
+				4A783B901CA9100200B49092 /* FPAnimation.swift */,
+				4A783B991CAA49E100B49092 /* FPCustomView.swift */,
 				4A098D4A1C85960E0067270D /* Error.swift */,
 				4A98E2A31C7AD94700D435BC /* NSString+MD5.h */,
 				4A98E2A41C7AD94700D435BC /* NSString+MD5.m */,
 				4A6BC7791C76F89300DACDA5 /* Info.plist */,
+				4A783B921CAA29BC00B49092 /* Images.xcassets */,
 			);
 			path = FilePreviewController;
 			sourceTree = "<group>";
@@ -140,6 +149,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A783B931CAA29BC00B49092 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -150,8 +160,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A783B911CA9100200B49092 /* FPAnimation.swift in Sources */,
 				4A098D4B1C85960E0067270D /* Error.swift in Sources */,
 				4AA21F041C7EF2F2009727EA /* SingleFilePreviewController.swift in Sources */,
+				4A783B9A1CAA49E100B49092 /* FPCustomView.swift in Sources */,
 				4A98E2A61C7AD94700D435BC /* NSString+MD5.m in Sources */,
 				4A98E29E1C7AD4F500D435BC /* FilePreviewController.swift in Sources */,
 			);
@@ -266,10 +278,12 @@
 				INFOPLIST_FILE = FilePreviewController/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.Teambition.FilePreviewController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -291,6 +305,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.Teambition.FilePreviewController;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};
