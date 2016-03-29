@@ -178,7 +178,7 @@ public class FilePreviewController: QLPreviewController {
     }
     
     func dismissSelf() {
-        presentingViewController?.dismissViewController()
+        presentingViewController?.dismissFilePreviewController()
     }
 }
 

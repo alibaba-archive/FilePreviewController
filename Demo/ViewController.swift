@@ -40,7 +40,7 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
         if let singleFilePreviewController = singleFilePreviewController {
             singleFilePreviewController.toolbarItems = [item1, item2, item3]
             let navigation = UINavigationController(rootViewController: singleFilePreviewController)
-            presentViewController(viewControllerToPresent: navigation, fromView: sender)
+            presentFilePreviewController(viewControllerToPresent: navigation, fromView: sender)
         }
         
         // Show original FilePreviewController

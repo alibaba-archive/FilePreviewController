@@ -13,23 +13,23 @@ let DismissDuration = 0.3
 var AssociatedObjectHandle: UInt8 = 0
 
 public extension UIViewController {
-    public func presentViewController(viewControllerToPresent controller: UIViewController, fromView: UIView?) {
+    public func presentFilePreviewController(viewControllerToPresent controller: UIViewController, fromView: UIView?) {
         if let fromView = fromView {
             let transitionDelegate = TransitionDelegate(fromView: fromView)
             controller.transitioningDelegate = transitionDelegate
-            controller.transitionDelegate = transitionDelegate
+            controller.fp_transitionDelegate = transitionDelegate
         }
         presentViewController(controller, animated: true, completion: nil)
     }
     
-    public func dismissViewController() {
+    public func dismissFilePreviewController() {
         if let viewController = presentedViewController {
-            viewController.transitioningDelegate = viewController.transitionDelegate
+            viewController.transitioningDelegate = viewController.fp_transitionDelegate
         }
         dismissViewControllerAnimated(true, completion: nil)
     }
 
-    internal var transitionDelegate: TransitionDelegate {
+    internal var fp_transitionDelegate: TransitionDelegate {
         get {
             return objc_getAssociatedObject(self, &AssociatedObjectHandle) as! TransitionDelegate
         }
@@ -78,7 +78,7 @@ public class PresentAnimation: NSObject, UIViewControllerAnimatedTransitioning {
         let toVC = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!
 
         container.addSubview(toVC.view)
-        let fromFrame = fromView.frame
+        let fromFrame = container.convertRect(fromView.frame, fromView: fromView.superview)
         let toFrame = transitionContext.finalFrameForViewController(toVC)
  
         let scale = CGAffineTransformMakeScale(fromFrame.width/toFrame.width, fromFrame.height/toFrame.height)
