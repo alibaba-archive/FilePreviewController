@@ -8,18 +8,18 @@
 
 import Foundation
 
-let PresentDuration = 0.3
-let DismissDuration = 0.2
+let PresentDuration = 0.4
+let DismissDuration = 0.3
 var AssociatedObjectHandle: UInt8 = 0
 
 public extension UIViewController {
-    public func showFilePreviewController(filePreviewController: UIViewController, fromView: UIView?) {
+    public func presentViewController(viewControllerToPresent controller: UIViewController, fromView: UIView?) {
         if let fromView = fromView {
             let transitionDelegate = TransitionDelegate(fromView: fromView)
-            filePreviewController.transitioningDelegate = transitionDelegate
-            filePreviewController.transitionDelegate = transitionDelegate
+            controller.transitioningDelegate = transitionDelegate
+            controller.transitionDelegate = transitionDelegate
         }
-        presentViewController(filePreviewController, animated: true, completion: nil)
+        presentViewController(controller, animated: true, completion: nil)
     }
     
     public func dismissViewController() {
@@ -84,9 +84,11 @@ public class PresentAnimation: NSObject, UIViewControllerAnimatedTransitioning {
         let scale = CGAffineTransformMakeScale(fromFrame.width/toFrame.width, fromFrame.height/toFrame.height)
         let translation = CGAffineTransformMakeTranslation(fromFrame.midX - toFrame.midX, fromFrame.midY - toFrame.midY)
         toVC.view.transform = CGAffineTransformConcat(scale, translation)
-
-        UIView.animateWithDuration(PresentDuration, animations: {
+        toVC.view.alpha = 0
+        
+        UIView.animateWithDuration(PresentDuration, delay: 0, options: .CurveEaseInOut, animations: {
             toVC.view.transform = CGAffineTransformMakeScale(1.0, 1.0)
+            toVC.view.alpha = 1
             }) { (_) in
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
         }
@@ -116,8 +118,8 @@ public class DismissAnimation: NSObject, UIViewControllerAnimatedTransitioning {
 
         let scale = CGAffineTransformMakeScale(toFrame.width/fromFrame.width, toFrame.height/fromFrame.height)
         let translation = CGAffineTransformMakeTranslation(toFrame.midX - fromFrame.midX, toFrame.midY - fromFrame.midY)
-
-        UIView.animateWithDuration(DismissDuration, animations: {
+        UIView.animateWithDuration(DismissDuration, delay: 0, options: .CurveEaseOut, animations: {
+            fromVC.view.alpha = 0
             fromVC.view.transform = CGAffineTransformConcat(scale, translation)
             }) { (_) in
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
