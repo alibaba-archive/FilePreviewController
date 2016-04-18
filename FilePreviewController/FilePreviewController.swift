@@ -341,7 +341,7 @@ extension FilePreviewController: QLPreviewControllerDataSource {
         
         let originalPreviewItem = (originalDataSource!.previewController(controller, previewItemAtIndex: index)) as! FilePreviewItem
         
-        if originalPreviewItem.previewItemURL.isFileReferenceURL() {
+        if originalPreviewItem.previewItemURL.fileURL {
             return originalPreviewItem
         }
         
