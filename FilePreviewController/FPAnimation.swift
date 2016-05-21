@@ -29,9 +29,9 @@ public extension UIViewController {
         dismissViewControllerAnimated(true, completion: nil)
     }
 
-    internal var fp_transitionDelegate: TransitionDelegate {
+    internal var fp_transitionDelegate: TransitionDelegate? {
         get {
-            return objc_getAssociatedObject(self, &AssociatedObjectHandle) as! TransitionDelegate
+            return objc_getAssociatedObject(self, &AssociatedObjectHandle) as? TransitionDelegate
         }
         set {
             objc_setAssociatedObject(self, &AssociatedObjectHandle, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -126,13 +126,3 @@ public class DismissAnimation: NSObject, UIViewControllerAnimatedTransitioning {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-

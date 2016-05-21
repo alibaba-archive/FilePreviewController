@@ -78,6 +78,15 @@ public class FilePreviewController: QLPreviewController {
     
     /// if header is not nil, Alamofire will use it for authentication
     public var headers: [String: String]?
+    public var actionItems = [ActionBarItem]() {
+        willSet {
+            newValue.map { $0.filePreviewController = self }
+        }
+        didSet {
+            toolbarItems = actionItems.map { $0.barButtonItem }
+        }
+    }
+
     var navigationBar: UINavigationBar?
     var isObserving = false
     var isFullScreen = false
@@ -121,7 +130,7 @@ public class FilePreviewController: QLPreviewController {
         if let navigationBar = navigationController?.navigationBar {
             self.navigationBar = navigationBar
         } else {
-            var subviews = view.subviews[0].subviews
+            let subviews = view.subviews[0].subviews
             for view in subviews {
                 if let navigationBar = view as? UINavigationBar {
                     self.navigationBar = navigationBar

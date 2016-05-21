@@ -12,19 +12,19 @@
 		4A6BC7911C76F8C500DACDA5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A6BC78F1C76F8C500DACDA5 /* Main.storyboard */; };
 		4A6BC7931C76F8C500DACDA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A6BC7921C76F8C500DACDA5 /* Assets.xcassets */; };
 		4A6BC7961C76F8C500DACDA5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A6BC7941C76F8C500DACDA5 /* LaunchScreen.storyboard */; };
+		4A7202961CF08E3900EF8191 /* FilePreviewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A7202951CF08E3900EF8191 /* FilePreviewController.framework */; };
+		4A7202971CF08E3900EF8191 /* FilePreviewController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4A7202951CF08E3900EF8191 /* FilePreviewController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		4A725BBA1C7D947800244964 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A725BB91C7D947800244964 /* Alamofire.framework */; };
-		4A783B961CAA2E8B00B49092 /* FilePreviewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A783B941CAA2E6500B49092 /* FilePreviewController.framework */; };
-		4A783B971CAA2E8B00B49092 /* FilePreviewController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4A783B941CAA2E6500B49092 /* FilePreviewController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		4A783B981CAA2E8B00B49092 /* Embed Frameworks */ = {
+		4A7202981CF08E3900EF8191 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4A783B971CAA2E8B00B49092 /* FilePreviewController.framework in Embed Frameworks */,
+				4A7202971CF08E3900EF8191 /* FilePreviewController.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -39,8 +39,8 @@
 		4A6BC7921C76F8C500DACDA5 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4A6BC7951C76F8C500DACDA5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4A6BC7971C76F8C500DACDA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4A7202951CF08E3900EF8191 /* FilePreviewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = FilePreviewController.framework; path = "/Users/wangwei/Library/Developer/Xcode/DerivedData/FilePreviewController-cgilrzohllcyfhhbsuhxaxtfphjl/Build/Products/Debug-iphonesimulator/FilePreviewController.framework"; sourceTree = "<absolute>"; };
 		4A725BB91C7D947800244964 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
-		4A783B941CAA2E6500B49092 /* FilePreviewController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FilePreviewController.framework; path = "../../Library/Developer/Xcode/DerivedData/FilePreviewController-cgilrzohllcyfhhbsuhxaxtfphjl/Build/Products/Debug-iphoneos/FilePreviewController.framework"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,8 +48,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A783B961CAA2E8B00B49092 /* FilePreviewController.framework in Frameworks */,
 				4A725BBA1C7D947800244964 /* Alamofire.framework in Frameworks */,
+				4A7202961CF08E3900EF8191 /* FilePreviewController.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +59,7 @@
 		4A6BC77F1C76F8C500DACDA5 = {
 			isa = PBXGroup;
 			children = (
-				4A783B941CAA2E6500B49092 /* FilePreviewController.framework */,
+				4A7202951CF08E3900EF8191 /* FilePreviewController.framework */,
 				4A725BB91C7D947800244964 /* Alamofire.framework */,
 				4A6BC78A1C76F8C500DACDA5 /* Demo */,
 				4A6BC7891C76F8C500DACDA5 /* Products */,
@@ -98,7 +98,7 @@
 				4A6BC7851C76F8C500DACDA5 /* Frameworks */,
 				4A6BC7861C76F8C500DACDA5 /* Resources */,
 				4A725BBB1C7D948700244964 /* ShellScript */,
-				4A783B981CAA2E8B00B49092 /* Embed Frameworks */,
+				4A7202981CF08E3900EF8191 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
