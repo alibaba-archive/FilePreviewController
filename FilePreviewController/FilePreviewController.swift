@@ -78,9 +78,11 @@ public class FilePreviewController: QLPreviewController {
     
     /// if header is not nil, Alamofire will use it for authentication
     public var headers: [String: String]?
-    public var actionItems = [ActionBarItem]() {
+    public var actionItems = [FPActionBarItem]() {
         willSet {
-            newValue.map { $0.filePreviewController = self }
+            for item in newValue {
+                item.filePreviewController = self
+            }
         }
         didSet {
             toolbarItems = actionItems.map { $0.barButtonItem }

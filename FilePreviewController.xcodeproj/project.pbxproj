@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		4A098D4B1C85960E0067270D /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A098D4A1C85960E0067270D /* Error.swift */; };
 		4A6BC7781C76F89300DACDA5 /* FilePreviewController.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A6BC7771C76F89300DACDA5 /* FilePreviewController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4A7202901CF085F000EF8191 /* ActionBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A72028F1CF085F000EF8191 /* ActionBarItem.swift */; };
+		4A7202901CF085F000EF8191 /* FPActionBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A72028F1CF085F000EF8191 /* FPActionBarItem.swift */; };
 		4A725BB81C7D940C00244964 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A725BB71C7D940C00244964 /* Alamofire.framework */; };
 		4A783B911CA9100200B49092 /* FPAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A783B901CA9100200B49092 /* FPAnimation.swift */; };
 		4A783B931CAA29BC00B49092 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A783B921CAA29BC00B49092 /* Images.xcassets */; };
@@ -25,7 +25,7 @@
 		4A6BC7741C76F89300DACDA5 /* FilePreviewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = FilePreviewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A6BC7771C76F89300DACDA5 /* FilePreviewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FilePreviewController.h; sourceTree = "<group>"; };
 		4A6BC7791C76F89300DACDA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4A72028F1CF085F000EF8191 /* ActionBarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActionBarItem.swift; sourceTree = "<group>"; };
+		4A72028F1CF085F000EF8191 /* FPActionBarItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FPActionBarItem.swift; sourceTree = "<group>"; };
 		4A725BB71C7D940C00244964 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		4A783B901CA9100200B49092 /* FPAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FPAnimation.swift; sourceTree = "<group>"; };
 		4A783B921CAA29BC00B49092 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -72,7 +72,7 @@
 				4A98E29D1C7AD4F500D435BC /* FilePreviewController.swift */,
 				4AA21F031C7EF2F2009727EA /* SingleFilePreviewController.swift */,
 				4A783B901CA9100200B49092 /* FPAnimation.swift */,
-				4A72028F1CF085F000EF8191 /* ActionBarItem.swift */,
+				4A72028F1CF085F000EF8191 /* FPActionBarItem.swift */,
 				4A783B991CAA49E100B49092 /* FPCustomView.swift */,
 				4A098D4A1C85960E0067270D /* Error.swift */,
 				4A98E2A31C7AD94700D435BC /* NSString+MD5.h */,
@@ -165,7 +165,7 @@
 			files = (
 				4A783B911CA9100200B49092 /* FPAnimation.swift in Sources */,
 				4A098D4B1C85960E0067270D /* Error.swift in Sources */,
-				4A7202901CF085F000EF8191 /* ActionBarItem.swift in Sources */,
+				4A7202901CF085F000EF8191 /* FPActionBarItem.swift in Sources */,
 				4AA21F041C7EF2F2009727EA /* SingleFilePreviewController.swift in Sources */,
 				4A783B9A1CAA49E100B49092 /* FPCustomView.swift in Sources */,
 				4A98E2A61C7AD94700D435BC /* NSString+MD5.m in Sources */,

@@ -22,7 +22,7 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
         // Dispose of any resources that can be recreated.
     }
     @IBAction func buttonTap(sender: UIButton) {
-        let item1 = ActionBarItem(title: "ONE", style: .Plain) { (controller, _) in
+        let item1 = FPActionBarItem(title: "ONE", style: .Plain) { (controller, _) in
             let viewController = UIViewController()
             viewController.title = "After FilePreviewController"
             viewController.view.backgroundColor = UIColor.whiteColor()
@@ -30,7 +30,7 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
         }
         item1.barButtonItem.tintColor = UIColor.blackColor()
 
-        let item2 = ActionBarItem(title: "TWO", style: .Plain) { (controller, item) in
+        let item2 = FPActionBarItem(title: "TWO", style: .Plain) { (controller, item) in
             print(item)
         }
         item2.barButtonItem.tintColor = UIColor.blackColor()

@@ -1,5 +1,5 @@
 //
-//  ActionBarItem.swift
+//  FPActionBarItem.swift
 //  FilePreviewController
 //
 //  Created by WangWei on 16/5/21.
@@ -10,9 +10,9 @@ import Foundation
 
 import Foundation
 
-public typealias BarActionClosure = (FilePreviewController, ActionBarItem) -> Void
+public typealias BarActionClosure = (FilePreviewController, FPActionBarItem) -> Void
 
-public class ActionBarItem: NSObject {
+public class FPActionBarItem: NSObject {
     public var barButtonItem: UIBarButtonItem!
     public var action: BarActionClosure?
     public weak var filePreviewController: FilePreviewController?
@@ -20,13 +20,13 @@ public class ActionBarItem: NSObject {
     public init(title: String?, style: UIBarButtonItemStyle, action: BarActionClosure? = nil) {
         super.init()
         self.action = action
-        barButtonItem = UIBarButtonItem(title: title, style: .Plain, target: self, action: #selector(ActionBarItem.triggerAction))
+        barButtonItem = UIBarButtonItem(title: title, style: .Plain, target: self, action: #selector(FPActionBarItem.triggerAction))
     }
     
     public init(image: UIImage?, style: UIBarButtonItemStyle, action: BarActionClosure? = nil) {
         super.init()
         self.action = action
-        barButtonItem = UIBarButtonItem(image: image, style: style, target: self, action: #selector(ActionBarItem.triggerAction))
+        barButtonItem = UIBarButtonItem(image: image, style: style, target: self, action: #selector(FPActionBarItem.triggerAction))
     }
     
     public init(barButtonItem: UIBarButtonItem, action: BarActionClosure? = nil) {
@@ -45,12 +45,12 @@ public class ActionBarItem: NSObject {
 
 public extension FilePreviewController {
     func addActionBarItem(title title: String?, style: UIBarButtonItemStyle, action: BarActionClosure?) {
-        let barItem = ActionBarItem(title: title, style: style, action: action)
+        let barItem = FPActionBarItem(title: title, style: style, action: action)
         barItem.filePreviewController = self
         actionItems.append(barItem)
     }
     
-    func insert(actionBarItem: ActionBarItem, at index: Int) {
+    func insert(actionBarItem: FPActionBarItem, at index: Int) {
         let barItem = actionBarItem
         barItem.filePreviewController = self
         actionItems.insert(barItem, atIndex: index)
