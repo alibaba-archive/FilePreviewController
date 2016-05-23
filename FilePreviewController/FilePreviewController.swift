@@ -117,7 +117,7 @@ public class FilePreviewController: QLPreviewController {
         super.viewDidLoad()
         if let rootViewController = navigationController?.viewControllers[0] {
             if rootViewController == self {
-                let crossImage = UIImage(named: "icon-cross", inBundle: NSBundle.init(forClass: classForCoder), compatibleWithTraitCollection: nil)
+                let crossImage = UIImage(named: "icon-cross", inBundle: NSBundle.init(forClass: FilePreviewController.self), compatibleWithTraitCollection: nil)
                 navigationItem.leftBarButtonItem = UIBarButtonItem(image: crossImage, style: .Plain, target: self, action: #selector(dismissSelf))
             }
         }
