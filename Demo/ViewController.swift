@@ -35,9 +35,10 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
         }
         item2.barButtonItem.tintColor = UIColor.blackColor()
         
-        let str3 = "https://www.google.com/intl/zh-CN/policies/privacy/google_privacy_policy_zh-CN.pdf"
-        let url = NSURL(string: str3)
-        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good File", fileExtension: "pdf")
+//        let str3 = "https://www.google.com/intl/zh-CN/policies/privacy/google_privacy_policy_zh-CN.pdf"
+        let str4 = "https://striker.teambition.net/storage/100cfe416a89a6ba84f3aa5820fad968147e?download=Teambition_API%E9%94%99%E8%AF%AF%E7%A0%81%E5%AE%9A%E4%B9%89.csv&Signature=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzEwMGNmZTQxNmE4OWE2YmE4NGYzYWE1ODIwZmFkOTY4MTQ3ZSIsImV4cCI6MTQ2NDEzNDQwMH0.b4JXuW9tMnYAor4QqDhcmv5bSb6cgRvmbg_nTfcfZ3s"
+        let url = NSURL(string: str4)
+        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good File", fileExtension: "csv")
         
         // Show SingleFilePreviewController, you can also push it into navigation controller
         let singleFilePreviewController = SingleFilePreviewController(previewItem: item)
@@ -63,9 +64,10 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
     }
     
     func previewController(controller: QLPreviewController, previewItemAtIndex index: Int) -> QLPreviewItem {
-        let str3 = "https://www.google.com/intl/zh-CN/policies/privacy/google_privacy_policy_zh-CN.pdf"
-        let url = NSURL(string: str3)
-        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good File", fileExtension: "pdf")
+//        let str3 = "https://www.google.com/intl/zh-CN/policies/privacy/google_privacy_policy_zh-CN.pdf"
+        let str4 = "https://striker.teambition.net/storage/100cfe416a89a6ba84f3aa5820fad968147e?download=Teambition_API%E9%94%99%E8%AF%AF%E7%A0%81%E5%AE%9A%E4%B9%89.csv&Signature=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzEwMGNmZTQxNmE4OWE2YmE4NGYzYWE1ODIwZmFkOTY4MTQ3ZSIsImV4cCI6MTQ2NDEzNDQwMH0.b4JXuW9tMnYAor4QqDhcmv5bSb6cgRvmbg_nTfcfZ3s"
+        let url = NSURL(string: str4)
+        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good File", fileExtension: "csv")
         return item
     }
     

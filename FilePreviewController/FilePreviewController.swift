@@ -27,7 +27,7 @@ public extension String {
 
 func localFilePathFor(URL: NSURL, fileExtension: String? = nil) -> String? {
     var url = URL
-    if let fileExtension = fileExtension where url.pathExtension == nil {
+    if let fileExtension = fileExtension where url.pathExtension == nil || url.pathExtension?.characters.count == 0 {
         url = url.URLByAppendingPathExtension(fileExtension)
     }
     let hashedURL = URL.absoluteString.MD5()
