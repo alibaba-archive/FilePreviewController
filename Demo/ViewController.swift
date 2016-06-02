@@ -31,6 +31,8 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
         item1.barButtonItem.tintColor = UIColor.blackColor()
 
         let item2 = FPActionBarItem(title: "TWO", style: .Plain) { (controller, item) in
+            controller.beginUpdate()
+            controller.update(progress: 0.5)
             print(item)
         }
         item2.barButtonItem.tintColor = UIColor.blackColor()

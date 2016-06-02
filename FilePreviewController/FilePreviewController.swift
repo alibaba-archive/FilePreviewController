@@ -88,6 +88,13 @@ public class FilePreviewController: QLPreviewController {
             toolbarItems = actionItems.map { $0.barButtonItem }
         }
     }
+    public lazy var bottomProgressView: UIProgressView = {
+        let progressView = UIProgressView(progressViewStyle: .Bar)
+        progressView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 2)
+        progressView.autoresizingMask = [.FlexibleWidth, .FlexibleBottomMargin]
+        progressView.tintColor = UIColor.blueColor()
+        return progressView
+    }()
 
     var navigationBar: UINavigationBar?
     var isObserving = false
@@ -190,6 +197,20 @@ public class FilePreviewController: QLPreviewController {
     
     func dismissSelf() {
         presentingViewController?.dismissFilePreviewController()
+    }
+}
+
+public extension FilePreviewController {
+    func beginUpdate() {
+        if bottomProgressView.superview == nil {
+            toolbar?.addSubview(bottomProgressView)
+        }
+    }
+    func endUpdate() {
+        bottomProgressView.removeFromSuperview()
+    }
+    func update(progress value: Float) {
+        bottomProgressView.progress = value
     }
 }
 

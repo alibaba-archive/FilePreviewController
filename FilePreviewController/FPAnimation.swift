@@ -111,7 +111,7 @@ public class DismissAnimation: NSObject, UIViewControllerAnimatedTransitioning {
         let fromVC = transitionContext.viewControllerForKey(UITransitionContextFromViewControllerKey)!
         let toVC = transitionContext.viewControllerForKey(UITransitionContextToViewControllerKey)!
 
-        toVC.view.frame = container.frame
+        toVC.view.frame = transitionContext.finalFrameForViewController(toVC)
         container.addSubview(toVC.view)
         container.addSubview(fromVC.view)
         let toFrame = container.convertRect(toView.frame, fromView: toView.superview)
@@ -123,6 +123,7 @@ public class DismissAnimation: NSObject, UIViewControllerAnimatedTransitioning {
             fromVC.view.alpha = 0
             fromVC.view.transform = CGAffineTransformConcat(scale, translation)
             }) { (_) in
+                fromVC.view.removeFromSuperview()
                 transitionContext.completeTransition(!transitionContext.transitionWasCancelled())
         }
     }
