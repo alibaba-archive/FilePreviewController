@@ -96,7 +96,37 @@ public class FilePreviewController: QLPreviewController {
         return progressView
     }()
 
-    var navigationBar: UINavigationBar?
+    lazy var navigationBar: UINavigationBar? = {
+        var bar: UINavigationBar?
+        if let navigationBar = self.navigationController?.navigationBar {
+            bar = navigationBar
+        } else {
+            let subviews = self.view.subviews[0].subviews
+            for view in subviews {
+                if let navigationBar = view as? UINavigationBar {
+                    bar = navigationBar
+                    break
+                }
+            }
+        }
+        
+        if let navigationBar = bar {
+            if !self.isObserving {
+                navigationBar.addObserver(self, forKeyPath: "center", options: [.New, .Old], context: &myContext)
+                self.isObserving = true
+            }
+        }
+        return bar
+    }()
+    var customNavigationBar: UINavigationBar!
+    lazy var leftBarButtonItem: UIBarButtonItem = {
+        let crossImage = UIImage(named: "icon-cross", inBundle: NSBundle.init(forClass: FilePreviewController.self), compatibleWithTraitCollection: nil)
+        return UIBarButtonItem(image: crossImage, style: .Plain, target: self, action: #selector(dismissSelf))
+    }()
+    lazy var rightBarButtonItem: UIBarButtonItem = {
+        let shareImage = UIImage(named: "icon-share", inBundle: NSBundle.init(forClass: FilePreviewController.self), compatibleWithTraitCollection: nil)
+        return UIBarButtonItem(image: shareImage, style: .Plain, target: self, action: #selector(showShareActivity))
+    }()
     var isObserving = false
     var isFullScreen = false
     
@@ -122,40 +152,30 @@ public class FilePreviewController: QLPreviewController {
     
     override public func viewDidLoad() {
         super.viewDidLoad()
-        if let rootViewController = navigationController?.viewControllers[0] {
-            if rootViewController == self {
-                let crossImage = UIImage(named: "icon-cross", inBundle: NSBundle.init(forClass: FilePreviewController.self), compatibleWithTraitCollection: nil)
-                navigationItem.leftBarButtonItem = UIBarButtonItem(image: crossImage, style: .Plain, target: self, action: #selector(dismissSelf))
-            }
-        }
     }
     
     override public func viewDidLayoutSubviews() {
         layoutToolbar()
     }
-    
-    override public func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-        if let navigationBar = navigationController?.navigationBar {
-            self.navigationBar = navigationBar
-        } else {
-            let subviews = view.subviews[0].subviews
-            for view in subviews {
-                if let navigationBar = view as? UINavigationBar {
-                    self.navigationBar = navigationBar
-                    break
-                }
-            }
-        }
-        
+
+    override public func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         if let navigationBar = navigationBar {
-            if !isObserving {
-                navigationBar.addObserver(self, forKeyPath: "center", options: [.New, .Old], context: &myContext)
-                isObserving = true
-            }
+            let bar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 44))
+            bar.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+            let item = UINavigationItem(title: navigationItem.title ?? "")
+            item.leftBarButtonItem = leftBarButtonItem
+            item.rightBarButtonItem = rightBarButtonItem
+            item.hidesBackButton = true
+            bar.pushNavigationItem(item, animated: true)
+            navigationBar.addSubview(bar)
         }
     }
     
+    override public func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+    }
+
     deinit {
         if let navigationBar = navigationBar {
             navigationBar.removeObserver(self, forKeyPath: "center")
@@ -197,6 +217,13 @@ public class FilePreviewController: QLPreviewController {
     
     func dismissSelf() {
         presentingViewController?.dismissFilePreviewController()
+    }
+
+    func showShareActivity() {
+        if let previewItemURL = currentPreviewItem?.previewItemURL {
+            let activity = UIActivityViewController(activityItems: [previewItemURL], applicationActivities: nil)
+            presentViewController(activity, animated: true, completion: nil)
+        }
     }
 }
 
