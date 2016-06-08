@@ -254,6 +254,7 @@ public class FilePreviewController: QLPreviewController {
     func showShareActivity() {
         if let previewItemURL = currentPreviewItem?.previewItemURL {
             let activity = UIActivityViewController(activityItems: [previewItemURL], applicationActivities: nil)
+            activity.popoverPresentationController?.barButtonItem = rightBarButtonItem
             presentViewController(activity, animated: true, completion: nil)
         }
     }
