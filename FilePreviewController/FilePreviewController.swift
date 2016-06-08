@@ -25,7 +25,7 @@ public extension String {
     }
 }
 
-func localFilePathFor(URL: NSURL, fileExtension: String? = nil) -> String? {
+public func localFilePathFor(URL: NSURL, fileExtension: String? = nil) -> String? {
     var url = URL
     if let fileExtension = fileExtension where url.pathExtension == nil || url.pathExtension?.characters.count == 0 {
         url = url.URLByAppendingPathExtension(fileExtension)
@@ -78,6 +78,7 @@ public class FilePreviewController: QLPreviewController {
     
     /// if header is not nil, Alamofire will use it for authentication
     public var headers: [String: String]?
+    public var enableShare = true
     public var actionItems = [FPActionBarItem]() {
         willSet {
             for item in newValue {
@@ -88,6 +89,12 @@ public class FilePreviewController: QLPreviewController {
             toolbarItems = actionItems.map { $0.barButtonItem }
         }
     }
+    override public var toolbarItems: [UIBarButtonItem]? {
+        didSet {
+            items = toolbarItems
+        }
+    }
+    public var items: [UIBarButtonItem]?
     public lazy var bottomProgressView: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .Bar)
         progressView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 2)
@@ -109,7 +116,7 @@ public class FilePreviewController: QLPreviewController {
                 }
             }
         }
-        
+
         if let navigationBar = bar {
             if !self.isObserving {
                 navigationBar.addObserver(self, forKeyPath: "center", options: [.New, .Old], context: &myContext)
@@ -118,7 +125,21 @@ public class FilePreviewController: QLPreviewController {
         }
         return bar
     }()
-    var customNavigationBar: UINavigationBar!
+
+    lazy var originalToolbar: UIToolbar? = {
+        var bar: UIToolbar?
+        if let subviews = self.navigationBar?.superview?.subviews {
+            for view in subviews {
+                if let toolbar = view as? UIToolbar {
+                    bar = toolbar
+                    break
+                }
+            }
+        }
+        bar?.tintColor = UIColor.whiteColor()
+        return bar
+    }()
+    var customNavigationBar: UINavigationBar?
     lazy var leftBarButtonItem: UIBarButtonItem = {
         let crossImage = UIImage(named: "icon-cross", inBundle: NSBundle.init(forClass: FilePreviewController.self), compatibleWithTraitCollection: nil)
         return UIBarButtonItem(image: crossImage, style: .Plain, target: self, action: #selector(dismissSelf))
@@ -149,9 +170,11 @@ public class FilePreviewController: QLPreviewController {
             originalDataSource = newValue
         }
     }
-    
+
     override public func viewDidLoad() {
         super.viewDidLoad()
+        let crossImage = UIImage(named: "icon-cross", inBundle: NSBundle.init(forClass: FilePreviewController.self), compatibleWithTraitCollection: nil)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: crossImage, style: .Plain, target: self, action: #selector(dismissSelf))
     }
     
     override public func viewDidLayoutSubviews() {
@@ -161,21 +184,20 @@ public class FilePreviewController: QLPreviewController {
     override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         if let navigationBar = navigationBar {
-            let bar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 44))
-            bar.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+            let bar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 64))
+            bar.autoresizingMask = [.FlexibleWidth]
             let item = UINavigationItem(title: navigationItem.title ?? "")
             item.leftBarButtonItem = leftBarButtonItem
-            item.rightBarButtonItem = rightBarButtonItem
+            if enableShare {
+                item.rightBarButtonItem = rightBarButtonItem
+            }
             item.hidesBackButton = true
             bar.pushNavigationItem(item, animated: true)
-            navigationBar.addSubview(bar)
+            customNavigationBar = bar
+            navigationBar.superview?.addSubview(bar)
         }
     }
     
-    override public func viewDidAppear(animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-
     deinit {
         if let navigationBar = navigationBar {
             navigationBar.removeObserver(self, forKeyPath: "center")
@@ -185,6 +207,7 @@ public class FilePreviewController: QLPreviewController {
     override public func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
         cancelProgress()
+        customNavigationBar?.removeFromSuperview()
     }
     
     override public func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
@@ -196,13 +219,22 @@ public class FilePreviewController: QLPreviewController {
                         toolbarBottomConstraint?.constant = -44
                         isFullScreen = true
                         UIView.animateWithDuration(0.2, animations: {
+                            self.customNavigationBar?.frame.origin.y = -64
                             self.view.layoutIfNeeded()
+                            }, completion: { (_) in
+                                self.originalToolbar?.hidden = true
                         })
                     } else if toolbarBottomConstraint?.constant < 0 && point.y > 0 {
                         toolbarBottomConstraint?.constant = 0
                         isFullScreen = false
                         UIView.animateWithDuration(0.2, animations: {
+                            self.customNavigationBar?.frame.origin.y = 0
                             self.view.layoutIfNeeded()
+                            self.originalToolbar?.hidden = true
+                            self.navigationBar?.superview?.bringSubviewToFront(self.customNavigationBar!)
+                            }, completion: { (_) in
+                                self.navigationBar?.superview?.bringSubviewToFront(self.customNavigationBar!)
+                                self.originalToolbar?.hidden = true
                         })
                     }
                     setNeedsStatusBarAppearanceUpdate()
@@ -321,9 +353,10 @@ extension FilePreviewController {
     }
     
     func layoutToolbar() {
-        guard let items = toolbarItems where items.count > 0 else {
+        guard let items = items where items.count > 0 else {
             return
         }
+        originalToolbar?.hidden = true
         if toolbar == nil {
             toolbar = UIToolbar()
             if let toolbar = toolbar {
@@ -371,9 +404,7 @@ extension FilePreviewController {
             toolbar.tintColor = UIColor.whiteColor()
         }
         if let toolbar = toolbar {
-            if view.subviews.indexOf(toolbar) < view.subviews.count-1 {
-                view.bringSubviewToFront(toolbar)
-            }
+            view.bringSubviewToFront(toolbar)
         }
     }
     
