@@ -13,19 +13,9 @@ import QuickLook
 class ViewController: UIViewController, QLPreviewControllerDataSource, FilePreviewControllerDelegate {
     
     let mov = "https://striker.teambition.net/storage/100c6c475a9c5e09dc851834c30b77f643bb?download=IMG_0155.MOV&Signature=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzEwMGM2YzQ3NWE5YzVlMDlkYzg1MTgzNGMzMGI3N2Y2NDNiYiIsImV4cCI6MTQ2NTQ3MzYwMH0.xglyie4hDWE3H8PeGRCm-j-jeEMsC-zdySbev-NQGA0"
-    let pdf = "https://striker.teambition.net/storage/100ceccd13eb309f57fb0e01f47f4b0986b0?download=%E6%98%A8%E5%A4%9C%E8%A3%99%E5%B8%A6%E8%A7%A3.pdf&Signature=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzEwMGNlY2NkMTNlYjMwOWY1N2ZiMGUwMWY0N2Y0YjA5ODZiMCIsImV4cCI6MTQ2NTQ3MzYwMH0.XcIs8W_m4bUv6ZJb79CNpOqoCfMO_8FCgtNsyLnhl1Y"
+    let pdf = "https://striker.teambition.net/storage/100ceccd13eb309f57fb0e01f47f4b0986b0?download=%E6%98%A8%E5%A4%9C%E8%A3%99%E5%B8%A6%E8%A7%A3.pdf&Signature=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzEwMGNlY2NkMTNlYjMwOWY1N2ZiMGUwMWY0N2Y0YjA5ODZiMCIsImV4cCI6MTQ2NjEyMTYwMH0.V3hsAQw_G8fVfT5-0NgljSAnrWiteKW103bdRM4T9FE"
 
     var filePreviewController: FilePreviewController?
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        let urlString = localFilePathFor(NSURL(string: mov)!)
-        if let urlString = urlString {
-            do {
-                try NSFileManager.defaultManager().removeItemAtPath(urlString)
-            } catch {
-            }
-        }
-    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

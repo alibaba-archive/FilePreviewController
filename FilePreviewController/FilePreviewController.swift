@@ -25,10 +25,14 @@ public extension String {
     }
 }
 
-public func localFilePathFor(URL: NSURL, fileExtension: String? = nil) -> String? {
+public func localFilePathFor(URL: NSURL, fileName: String? = nil, fileExtension: String? = nil) -> String? {
     var url = URL
     if let fileExtension = fileExtension where url.pathExtension == nil || url.pathExtension?.characters.count == 0 {
         url = url.URLByAppendingPathExtension(fileExtension)
+    }
+    var saveName: String?
+    if let fileName = fileName, fileExtension = fileExtension {
+        saveName = fileName + "." + fileExtension
     }
     let hashedURL = URL.absoluteString.MD5()
     
@@ -45,7 +49,7 @@ public func localFilePathFor(URL: NSURL, fileExtension: String? = nil) -> String
             return nil
         }
     }
-    if let lastPathComponent = url.lastPathComponent {
+    if let lastPathComponent = saveName ?? url.lastPathComponent {
         // add extra directory to keep original file name when share
         cacheDirectory = cacheDirectory.stringByAppendingPathComponent(lastPathComponent)
     }
@@ -102,19 +106,19 @@ public class FilePreviewController: QLPreviewController {
         progressView.tintColor = UIColor.blueColor()
         return progressView
     }()
+    private var shouldDisplayToolbar: Bool {
+        get {
+            return items?.count > 0
+        }
+    }
 
     lazy var navigationBar: UINavigationBar? = {
         var bar: UINavigationBar?
         if let navigationBar = self.navigationController?.navigationBar {
             bar = navigationBar
         } else {
-            let subviews = self.view.subviews[0].subviews
-            for view in subviews {
-                if let navigationBar = view as? UINavigationBar {
-                    bar = navigationBar
-                    break
-                }
-            }
+            let nBar = self.getNavigationBar(fromView: self.view)
+            bar = nBar
         }
 
         if let navigationBar = bar {
@@ -183,9 +187,10 @@ public class FilePreviewController: QLPreviewController {
 
     override public func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        if let navigationBar = navigationBar {
+        if let navigationBar = navigationBar, container = navigationBar.superview {
             let bar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 64))
             bar.autoresizingMask = [.FlexibleWidth]
+            container.addSubview(bar)
             let item = UINavigationItem(title: navigationItem.title ?? "")
             item.leftBarButtonItem = leftBarButtonItem
             if enableShare {
@@ -194,7 +199,6 @@ public class FilePreviewController: QLPreviewController {
             item.hidesBackButton = true
             bar.pushNavigationItem(item, animated: true)
             customNavigationBar = bar
-            navigationBar.superview?.addSubview(bar)
         }
     }
     
@@ -215,21 +219,24 @@ public class FilePreviewController: QLPreviewController {
             if let change = change {
                 if let new = change[NSKeyValueChangeNewKey] as? NSValue {
                     let point = new.CGPointValue()
-                    if toolbarBottomConstraint?.constant >= 0 && point.y < 0 {
+                    if !isFullScreen && point.y < 0 {
                         toolbarBottomConstraint?.constant = -44
                         isFullScreen = true
                         UIView.animateWithDuration(0.2, animations: {
-                            self.customNavigationBar?.frame.origin.y = -64
                             self.view.layoutIfNeeded()
+                            self.customNavigationBar?.frame.origin.y = -64
+                            self.navigationBar?.superview?.layoutIfNeeded()
                             }, completion: { (_) in
                                 self.originalToolbar?.hidden = true
+                                self.navigationBar?.superview?.sendSubviewToBack(self.navigationBar!)
                         })
-                    } else if toolbarBottomConstraint?.constant < 0 && point.y > 0 {
-                        toolbarBottomConstraint?.constant = 0
+                    } else if isFullScreen && point.y > 0 {
+                        toolbarBottomConstraint?.constant = shouldDisplayToolbar ? 0 : -45
                         isFullScreen = false
                         UIView.animateWithDuration(0.2, animations: {
-                            self.customNavigationBar?.frame.origin.y = 0
                             self.view.layoutIfNeeded()
+                            self.customNavigationBar?.frame.origin.y = 0
+                            self.navigationBar?.superview?.layoutIfNeeded()
                             self.originalToolbar?.hidden = true
                             self.navigationBar?.superview?.bringSubviewToFront(self.customNavigationBar!)
                             }, completion: { (_) in
@@ -258,6 +265,19 @@ public class FilePreviewController: QLPreviewController {
             presentViewController(activity, animated: true, completion: nil)
         }
     }
+
+    func getNavigationBar(fromView view: UIView) -> UINavigationBar? {
+        for v in view.subviews {
+            if v is UINavigationBar {
+                return v as? UINavigationBar
+            } else {
+                if let bar = getNavigationBar(fromView: v) {
+                    return bar
+                }
+            }
+        }
+        return nil
+    }
 }
 
 public extension FilePreviewController {
@@ -278,7 +298,7 @@ extension FilePreviewController {
     func downloadFor(item: FilePreviewItem) {
         
         UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        guard let localFilePath = localFilePathFor(item.previewItemURL, fileExtension: item.fileExtension) else {
+        guard let localFilePath = localFilePathFor(item.previewItemURL, fileName: item.previewItemTitle, fileExtension: item.fileExtension) else {
             if let controllerDelegate = self.controllerDelegate {
                 let error = Error.errorWithCode(.LocalCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")
                 controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: item, error: error)
@@ -354,9 +374,6 @@ extension FilePreviewController {
     }
     
     func layoutToolbar() {
-        guard let items = items where items.count > 0 else {
-            return
-        }
         originalToolbar?.hidden = true
         if toolbar == nil {
             toolbar = UIToolbar()
@@ -369,7 +386,8 @@ extension FilePreviewController {
                 view.addConstraint(toolbarBottomConstraint!)
             }
 
-            guard let toolbar = toolbar else {
+            guard let toolbar = toolbar, items = items where items.count > 0 else {
+                toolbarBottomConstraint?.constant = -44
                 return
             }
             let flexSpace = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil)
@@ -445,7 +463,7 @@ extension FilePreviewController: QLPreviewControllerDataSource {
             copyItem = FilePreviewItem(previewItemURL: originalPreviewItem.previewItemURL)
         }
         
-        guard let localFilePath = localFilePathFor(originalPreviewItem.previewItemURL, fileExtension: originalPreviewItem.fileExtension) else {
+        guard let localFilePath = localFilePathFor(originalPreviewItem.previewItemURL, fileName: originalPreviewItem.previewItemTitle, fileExtension: originalPreviewItem.fileExtension) else {
             //failed to get local file path
             if let controllerDelegate = self.controllerDelegate {
                 let error = Error.errorWithCode(.LocalCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")
