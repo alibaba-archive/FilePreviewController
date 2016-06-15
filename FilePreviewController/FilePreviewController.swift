@@ -31,7 +31,7 @@ public func localFilePathFor(URL: NSURL, fileName: String? = nil, fileExtension:
         url = url.URLByAppendingPathExtension(fileExtension)
     }
     var saveName: String?
-    if let fileName = fileName, fileExtension = fileExtension {
+    if let fileName = fileName?.stringByReplacingOccurrencesOfString("/", withString: ":"), fileExtension = fileExtension {
         saveName = fileName + "." + fileExtension
     }
     let hashedURL = URL.absoluteString.MD5()
@@ -174,6 +174,7 @@ public class FilePreviewController: QLPreviewController {
             originalDataSource = newValue
         }
     }
+    var interactionController: UIDocumentInteractionController?
 
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -260,9 +261,8 @@ public class FilePreviewController: QLPreviewController {
 
     func showShareActivity() {
         if let previewItemURL = currentPreviewItem?.previewItemURL {
-            let activity = UIActivityViewController(activityItems: [previewItemURL], applicationActivities: nil)
-            activity.popoverPresentationController?.barButtonItem = rightBarButtonItem
-            presentViewController(activity, animated: true, completion: nil)
+            interactionController = UIDocumentInteractionController(URL: previewItemURL)
+            interactionController?.presentOptionsMenuFromBarButtonItem(rightBarButtonItem, animated: true)
         }
     }
 

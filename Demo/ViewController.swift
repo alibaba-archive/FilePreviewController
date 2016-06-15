@@ -38,7 +38,7 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
         item2.barButtonItem.tintColor = UIColor.blackColor()
         
         let url = NSURL(string: pdf)
-        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good File Good File Good File Good File Good File Good File Good File Good File Good File Good FileGood File", fileExtension: "pdf")
+        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good Good File/Good File", fileExtension: "pdf")
 
         // Show SingleFilePreviewController, you can also push it into navigation controller
         let singleFilePreviewController = SingleFilePreviewController(previewItem: item)
