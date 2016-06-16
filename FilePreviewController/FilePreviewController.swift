@@ -32,10 +32,13 @@ public func localFilePathFor(URL: NSURL, fileName: String? = nil, fileExtension:
     }
     var saveName: String?
     if let fileName = fileName?.stringByReplacingOccurrencesOfString("/", withString: ":"), fileExtension = fileExtension {
-        saveName = fileName + "." + fileExtension
+        saveName = fileName
+        if !fileName.hasSuffix(".\(fileExtension)") {
+            saveName = "\(fileName).\(fileExtension)"
+        }
     }
     let hashedURL = URL.absoluteString.MD5()
-    
+
     guard var cacheDirectory = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true).last else {
         return nil
     }
@@ -53,7 +56,7 @@ public func localFilePathFor(URL: NSURL, fileName: String? = nil, fileExtension:
         // add extra directory to keep original file name when share
         cacheDirectory = cacheDirectory.stringByAppendingPathComponent(lastPathComponent)
     }
-    
+
     return cacheDirectory
 }
 
