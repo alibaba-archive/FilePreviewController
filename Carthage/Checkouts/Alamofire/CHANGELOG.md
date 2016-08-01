@@ -3,7 +3,8 @@ All notable changes to this project will be documented in this file.
 `Alamofire` adheres to [Semantic Versioning](http://semver.org/).
 
 #### 3.x Releases
-- `3.3.x` Releases - [3.3.0](#330)
+- `3.4.x` Releases - [3.4.0](#340) | [3.4.1](#341)
+- `3.3.x` Releases - [3.3.0](#330) | [3.3.1](#331)
 - `3.2.x` Releases - [3.2.0](#320) | [3.2.1](#321)
 - `3.1.x` Releases - [3.1.0](#310) | [3.1.1](#311) | [3.1.2](#312) | [3.1.3](#313) | [3.1.4](#314) | [3.1.5](#315)
 - `3.0.x` Releases - [3.0.0](#300) | [3.0.1](#301)
@@ -20,6 +21,136 @@ All notable changes to this project will be documented in this file.
 - `1.0.x` Releases - [1.0.0](#100) | [1.0.1](#101)
 
 ---
+
+## [3.4.1](https://github.com/Alamofire/Alamofire/releases/tag/3.4.1)
+Released on 2016-06-12. All issues associated with this milestone can be found using this
+[filter](https://github.com/Alamofire/Alamofire/issues?utf8=✓&q=milestone%3A3.4.1).
+
+#### Added
+- Rdar `26761490` to the list of rdars affecting Alamofire.
+  - Added by [Christian Noon](https://github.com/cnoon) in Pull Request
+  [#1262](https://github.com/Alamofire/Alamofire/pull/1262).
+- A new `debugDescription` test for a MultipartFormData Request with duplicate headers.
+  - Added by [Christian Noon](https://github.com/cnoon) in Regards to Issue
+  [#1303](https://github.com/Alamofire/Alamofire/issues/1303).
+
+#### Updated
+- CocoaPod installation instructions in README to be compatible with 1.x.
+  - Updated by [Luis Ferro](https://github.com/lferro9000) in Pull Request
+  [#1288](https://github.com/Alamofire/Alamofire/pull/1288).
+- The README to reflect the best error practices in response serializers.
+  - Updated by [Jon Shier](https://github.com/jshier) in Pull Request
+  [#1273](https://github.com/Alamofire/Alamofire/pull/1273).
+- The generation of the `User-Agent` header to use non-localized sources.
+  - Updated by [Jon Shier](https://github.com/jshier) in Pull Request
+  [#1292](https://github.com/Alamofire/Alamofire/pull/1292) in Regards to Issue
+  [#1269](https://github.com/Alamofire/Alamofire/pull/1269).
+- The `Generic Response Object Serialization` section of the README to use protocol extension.
+  - Updated by [Raphael Oliveira](https://github.com/raphaeloliveira) in Pull Request
+  [#1257](https://github.com/Alamofire/Alamofire/pull/1257).
+- Reachability by removing explicit IPv6 logic since OS handles this automatically.
+  - Updated by [Christian Noon](https://github.com/cnoon) in Pull Request
+  [#1308](https://github.com/Alamofire/Alamofire/pull/1308) in Regards to Issue
+  [#1228](https://github.com/Alamofire/Alamofire/pull/1228).
+- Host manager reachability test to use different hostname to improve test reliability.
+  - Updated by [Christian Noon](https://github.com/cnoon) in Pull Request
+  [#1308](https://github.com/Alamofire/Alamofire/pull/1308).
+
+#### Removed
+- `ReleaseTest` configuration and updated Travis-CI yaml file to enable testability directly.
+  - Removed by [Christian Noon](https://github.com/cnoon).
+
+#### Fixed
+- Memory leak in `Timeline` description and debugDescription due to string interpolation.
+  - Fixed by [Christian Noon](https://github.com/cnoon) in Pull Request
+  [#1262](https://github.com/Alamofire/Alamofire/issues/1262) in Regards to Issue
+  [#1232](https://github.com/Alamofire/Alamofire/issues/1232).
+
+## [3.4.0](https://github.com/Alamofire/Alamofire/releases/tag/3.4.0)
+Released on 2016-05-08. All issues associated with this milestone can be found using this
+[filter](https://github.com/Alamofire/Alamofire/issues?utf8=✓&q=milestone%3A3.4.0).
+
+#### Added
+- Status code and content type values into validation `NSError` userInfo dictionaries.
+  - Added by [Cédric Luthi](https://github.com/0xced) in Pull Request
+  [#1166](https://github.com/Alamofire/Alamofire/pull/1166).
+- New `authorizationHeader` API to generate base64 encoded authorization header.
+  - Added by [Cédric Luthi](https://github.com/0xced) in Pull Request
+  [#1187](https://github.com/Alamofire/Alamofire/pull/1187).
+
+#### Updated
+- URLProtocol tests to demonstrate using `NSURLProtocol` with `NSURLSession`.
+  - Updated by [Christian Noon](https://github.com/cnoon) in Regards to Issue
+  [#1160](https://github.com/Alamofire/Alamofire/issues/1160).
+- The `SesionDelegate` to no longer be `final` to allow subclassing.
+  - Updated by [Christian Noon](https://github.com/cnoon) in Pull Request
+  [#1172](https://github.com/Alamofire/Alamofire/issues/1172) in Regards to Issue
+  [#1145](https://github.com/Alamofire/Alamofire/issues/1145).  
+- The `SessionDelegate` subscript public to allow full control when subclassing.
+  - Updated by [Christian Noon](https://github.com/cnoon) in Pull Request
+  [#1172](https://github.com/Alamofire/Alamofire/issues/1172).
+- The `Response Serialization` section of the README to include validation examples.
+  - Updated by [Christian Noon](https://github.com/cnoon) in Regards to Issue
+  [#1213](https://github.com/Alamofire/Alamofire/issues/1213).
+- The delegate guard in the `Manager` initializer in front of property assignment.
+  - Updated by [Broccoliii](https://github.com/broccolii) in Pull Request
+  [#1226](https://github.com/Alamofire/Alamofire/issues/1226).
+- Header example in the README to use `Accept` header instead of `Content-Type`.
+  - Updated by [Christian Noon](https://github.com/cnoon) in Regards to Pull Request
+  [#1229](https://github.com/Alamofire/Alamofire/issues/1229).
+
+#### Deprecated
+- The `errorWithCode` APIs and updated NSURLError* domains to `NSURLErrorDomain`.
+  - Deprecated by [Cédric Luthi](https://github.com/0xced) in Pull Request
+  [#1166](https://github.com/Alamofire/Alamofire/pull/1166).
+
+#### Fixed
+- Issue where Requests with invalid credentials were not terminating with 401 status code.
+  - Fixed by [Cédric Luthi](https://github.com/0xced) in Pull Request
+  [#1164](https://github.com/Alamofire/Alamofire/pull/1164) in Regards to Issue
+  [#1159](https://github.com/Alamofire/Alamofire/issues/1159).
+- Issue in URLProtocol test where config headers are not passed prior to iOS 9.0.
+  - Fixed by [Christian Noon](https://github.com/cnoon).
+- Issue where Request `cURLRepresentation` method was not coalescing duplicate headers.
+  - Fixed by [Chris Richards](https://github.com/chrisrichards) in Pull Request
+  [#1186](https://github.com/Alamofire/Alamofire/pull/1186) in Regards to Issue
+  [#1184](https://github.com/Alamofire/Alamofire/issues/1184).
+- Issue where incorrect dash in License file was breaking markdown parsing.
+  - Fixed by [Gemma Barlow](https://github.com/gemmakbarlow) in Pull Request
+  [#1218](https://github.com/Alamofire/Alamofire/issues/1218).
+- Issue where internal quotes were not escaped correctly in cURL output.
+  - Fixed by [Christian Noon](https://github.com/cnoon).
+
+---
+
+## [3.3.1](https://github.com/Alamofire/Alamofire/releases/tag/3.3.1)
+Released on 2016-04-06. All issues associated with this milestone can be found using this
+[filter](https://github.com/Alamofire/Alamofire/issues?utf8=✓&q=milestone%3A3.3.1).
+
+#### Added
+- Tests for the `SessionDelegate` redirect with completion override closure.
+  - Added by [Kevin Harwood](https://github.com/kcharwood) in Pull Request
+  [#1141](https://github.com/Alamofire/Alamofire/issues/1141).
+- Tests for all the `SessionDelegate` override closures.
+  - Added by [Christian Noon](https://github.com/cnoon).
+
+#### Updated
+- The authentication test cases to clear out all cookies to help stabilize Travis-CI.
+  - Updated by [Christian Noon](https://github.com/cnoon).
+- The cache test check for no store header to use availability checks.
+  - Updated by [Christian Noon](https://github.com/cnoon).
+
+#### Fixed
+- The `respondsToSelector` check for the new HTTP redirect closure with completion.
+  - Fixed by [Kevin Harwood](https://github.com/kcharwood) in Pull Request
+  [#1141](https://github.com/Alamofire/Alamofire/issues/1141) in Regards to Issue
+  [#1140](https://github.com/Alamofire/Alamofire/issues/1140).
+- Issue where the challenge and response `SessionDelegate` override closures were not called.
+  - Fixed by [Christian Noon](https://github.com/cnoon).
+- Typo in the Travis YAML file that was causing all tests to always fail on iOS 9.1.
+  - Fixed by [Christian Noon](https://github.com/cnoon).
+- Race condition in the cache tests that was causing random failures on Travis-CI.
+  - Fixed by [Christian Noon](https://github.com/cnoon).
 
 ## [3.3.0](https://github.com/Alamofire/Alamofire/releases/tag/3.3.0)
 Released on 2016-03-23. All issues associated with this milestone can be found using this
@@ -55,6 +186,15 @@ Released on 2016-03-23. All issues associated with this milestone can be found u
   streams with the current runloop.
   - Fixed by [Brian King](https://github.com/KingOfBrian) in Pull Request
   [#1121](https://github.com/Alamofire/Alamofire/pull/1121).
+
+#### Upgrade Notes
+This release requires Xcode 7.3+ otherwise the Swift 2.2 changes will **NOT COMPILE**. There are several reasons why this was deployed as a MINOR and not MAJOR release. First off, the public API changes of this release are fully backwards compatible. There are no breaking API changes in the public APIs. Strictly following semver dictates that this is a MINOR, not MAJOR release.
+
+> See [semver](http://semver.org/#semantic-versioning-specification-semver) for more info.
+
+We also realize that this can be frustrating for those out there not ready to upgrade to Xcode 7.3. Please know that we consider each release version carefully before deploying. Our decision to bump the MINOR version was not only due to strictly following semver, but also because it's difficult and undesirable for all OSS libraries to bump MAJOR versions each time the Swift APIs are incremented. Alamofire would have had to go through 6 additional MAJOR versions if this was the policy. That would mean we'd already be running on Alamofire 10.x. Incrementing MAJOR versions this quickly is disruptive to the community and would cause even more confusion. Instead, we try to carefully plan our MAJOR version releases and accompany them with detailed Migration Guides to help make the transition as smooth as possible.
+
+If anyone has additional questions, please feel free to open an issue and we'll be more than happy to discuss further.
 
 ---
 

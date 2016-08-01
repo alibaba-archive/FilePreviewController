@@ -363,7 +363,7 @@ extension FilePreviewController {
     }
     
     func layoutProgressBar() {
-        guard let navigationBar = navigationController?.navigationBar, progressBar = progressBar else {
+        guard let navigationBar = customNavigationBar, progressBar = progressBar else {
             return
         }
         if !navigationBar.subviews.contains(progressBar) {
