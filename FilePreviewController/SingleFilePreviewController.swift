@@ -15,7 +15,8 @@ public class SingleFilePreviewController: FilePreviewController {
     public init(previewItem: FilePreviewItem) {
         super.init(nibName: nil, bundle: nil)
         singleItemDataSource = SingleItemDataSource(previewItem: previewItem)
-        dataSource = singleItemDataSource
+        originalDataSource = singleItemDataSource
+        dataSource = self
     }
 
     required public init?(coder aDecoder: NSCoder) {

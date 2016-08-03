@@ -168,15 +168,15 @@ public class FilePreviewController: QLPreviewController {
     
     public weak var controllerDelegate: FilePreviewControllerDelegate?
     
-    override public weak var dataSource: QLPreviewControllerDataSource? {
-        get {
-            return originalDataSource
-        }
-        set {
-            super.dataSource = self
-            originalDataSource = newValue
-        }
-    }
+//    override public weak var dataSource: QLPreviewControllerDataSource? {
+//        get {
+//            return originalDataSource
+//        }
+//        set {
+//            super.dataSource = self
+//            originalDataSource = newValue
+//        }
+//    }
     var interactionController: UIDocumentInteractionController?
 
     override public func viewDidLoad() {

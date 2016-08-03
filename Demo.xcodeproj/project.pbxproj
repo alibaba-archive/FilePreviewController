@@ -13,18 +13,18 @@
 		4A6BC7931C76F8C500DACDA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A6BC7921C76F8C500DACDA5 /* Assets.xcassets */; };
 		4A6BC7961C76F8C500DACDA5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A6BC7941C76F8C500DACDA5 /* LaunchScreen.storyboard */; };
 		4A725BBA1C7D947800244964 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A725BB91C7D947800244964 /* Alamofire.framework */; };
-		4ADFD87D1D01A7F200045635 /* FilePreviewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4ADFD87C1D01A7F200045635 /* FilePreviewController.framework */; };
-		4ADFD87E1D01A7F200045635 /* FilePreviewController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4ADFD87C1D01A7F200045635 /* FilePreviewController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		AC5B4C701D51C16C00441EB7 /* FilePreviewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC5B4C6F1D51C16C00441EB7 /* FilePreviewController.framework */; };
+		AC5B4C711D51C16C00441EB7 /* FilePreviewController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AC5B4C6F1D51C16C00441EB7 /* FilePreviewController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		4ADFD87F1D01A7F200045635 /* Embed Frameworks */ = {
+		AC5B4C721D51C16C00441EB7 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				4ADFD87E1D01A7F200045635 /* FilePreviewController.framework in Embed Frameworks */,
+				AC5B4C711D51C16C00441EB7 /* FilePreviewController.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -40,7 +40,7 @@
 		4A6BC7951C76F8C500DACDA5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4A6BC7971C76F8C500DACDA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A725BB91C7D947800244964 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
-		4ADFD87C1D01A7F200045635 /* FilePreviewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = FilePreviewController.framework; path = "/Users/wangwei/Library/Developer/Xcode/DerivedData/FilePreviewController-cgilrzohllcyfhhbsuhxaxtfphjl/Build/Products/Debug-iphoneos/FilePreviewController.framework"; sourceTree = "<absolute>"; };
+		AC5B4C6F1D51C16C00441EB7 /* FilePreviewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = FilePreviewController.framework; path = "/Users/zhangxiaolian/Library/Developer/Xcode/DerivedData/FilePreviewController-ffndzcmkttkhjmalwficlpjitijb/Build/Products/Debug-iphonesimulator/FilePreviewController.framework"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,7 +49,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A725BBA1C7D947800244964 /* Alamofire.framework in Frameworks */,
-				4ADFD87D1D01A7F200045635 /* FilePreviewController.framework in Frameworks */,
+				AC5B4C701D51C16C00441EB7 /* FilePreviewController.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -59,7 +59,7 @@
 		4A6BC77F1C76F8C500DACDA5 = {
 			isa = PBXGroup;
 			children = (
-				4ADFD87C1D01A7F200045635 /* FilePreviewController.framework */,
+				AC5B4C6F1D51C16C00441EB7 /* FilePreviewController.framework */,
 				4A725BB91C7D947800244964 /* Alamofire.framework */,
 				4A6BC78A1C76F8C500DACDA5 /* Demo */,
 				4A6BC7891C76F8C500DACDA5 /* Products */,
@@ -98,7 +98,7 @@
 				4A6BC7851C76F8C500DACDA5 /* Frameworks */,
 				4A6BC7861C76F8C500DACDA5 /* Resources */,
 				4A725BBB1C7D948700244964 /* ShellScript */,
-				4ADFD87F1D01A7F200045635 /* Embed Frameworks */,
+				AC5B4C721D51C16C00441EB7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
