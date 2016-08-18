@@ -75,10 +75,6 @@ public class FilePreviewItem: NSObject, QLPreviewItem {
     }
 }
 
-public protocol FilePreviewControllerDelegate: NSObjectProtocol {
-    func previewController(controller: FilePreviewController, failedToLoadRemotePreviewItem item:QLPreviewItem, error: NSError)
-}
-
 private var myContext = 0
 
 public class FilePreviewController: QLPreviewController {
@@ -262,13 +258,6 @@ public class FilePreviewController: QLPreviewController {
         presentingViewController?.dismissFilePreviewController()
     }
 
-    func showShareActivity() {
-        if let previewItemURL = currentPreviewItem?.previewItemURL {
-            interactionController = UIDocumentInteractionController(URL: previewItemURL)
-            interactionController?.presentOptionsMenuFromBarButtonItem(rightBarButtonItem, animated: true)
-        }
-    }
-
     func getNavigationBar(fromView view: UIView) -> UINavigationBar? {
         for v in view.subviews {
             if v is UINavigationBar {
@@ -280,6 +269,27 @@ public class FilePreviewController: QLPreviewController {
             }
         }
         return nil
+    }
+}
+
+// MARK: - Share
+public extension FilePreviewController {
+    func showShareActivity() {
+        guard let previewItem = currentPreviewItem as? FilePreviewItem else {
+            return
+        }
+        if let delegate = controllerDelegate {
+            delegate.previewController(self, willShareItem: previewItem)
+        } else {
+            defautlShareActivity()
+        }
+    }
+
+    func defautlShareActivity() {
+        if let previewItemURL = currentPreviewItem?.previewItemURL {
+            interactionController = UIDocumentInteractionController(URL: previewItemURL)
+            interactionController?.presentOptionsMenuFromBarButtonItem(rightBarButtonItem, animated: true)
+        }
     }
 }
 

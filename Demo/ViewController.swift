@@ -11,11 +11,7 @@ import FilePreviewController
 import QuickLook
 
 class ViewController: UIViewController, QLPreviewControllerDataSource, FilePreviewControllerDelegate {
-    
-    let mov = "https://striker.teambition.net/storage/100c6c475a9c5e09dc851834c30b77f643bb?download=IMG_0155.MOV&Signature=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzEwMGM2YzQ3NWE5YzVlMDlkYzg1MTgzNGMzMGI3N2Y2NDNiYiIsImV4cCI6MTQ2NTQ3MzYwMH0.xglyie4hDWE3H8PeGRCm-j-jeEMsC-zdySbev-NQGA0"
-    let pdf = "https://striker.teambition.net/storage/100ceccd13eb309f57fb0e01f47f4b0986b0?download=%E6%98%A8%E5%A4%9C%E8%A3%99%E5%B8%A6%E8%A7%A3.pdf&Signature=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzEwMGNlY2NkMTNlYjMwOWY1N2ZiMGUwMWY0N2Y0YjA5ODZiMCIsImV4cCI6MTQ2NjEyMTYwMH0.V3hsAQw_G8fVfT5-0NgljSAnrWiteKW103bdRM4T9FE"
-    let jpg = "https://striker.teambition.net/storage/110i2086581d371281381bca99d7f0f2e7cc?download=IMG_0009.JPG&Signature=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzExMGkyMDg2NTgxZDM3MTI4MTM4MWJjYTk5ZDdmMGYyZTdjYyIsImV4cCI6MTQ3MDIyNTYwMH0.OEcgZzgS12pi0KVisgRq_ZXZg8NhV9xcfSb14mx_ydY"
-
+    let jpg = "https://pic4.zhimg.com/b06cb1c48ef44b75911c6f11fc8b68b7_b.jpg"
     var filePreviewController: FilePreviewController?
 
     override func didReceiveMemoryWarning() {
@@ -45,19 +41,22 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
         let singleFilePreviewController = SingleFilePreviewController(previewItem: item)
         singleFilePreviewController.enableShare = true
         singleFilePreviewController.actionItems = [item1, item2]
+        singleFilePreviewController.controllerDelegate = self
         let navigation = UINavigationController(rootViewController: singleFilePreviewController)
         presentFilePreviewController(viewControllerToPresent: navigation, fromView: sender)
         
-        // Show original FilePreviewController
-//        filePreviewController = FilePreviewController()
-//        if let filePreviewController = filePreviewController {
-//            filePreviewController.controllerDelegate = self
-//            filePreviewController.dataSource = self
-//            filePreviewController.toolbarItems = [item1, item2, item3]
-//            navigationController?.pushViewController(filePreviewController, animated: true)
-//            let navigation = UINavigationController(rootViewController: filePreviewController)
-//            showFilePreviewController(navigation, fromView: sender)
-//        }
+        /*
+         // Show original FilePreviewController
+        filePreviewController = FilePreviewController()
+        if let filePreviewController = filePreviewController {
+            filePreviewController.controllerDelegate = self
+            filePreviewController.dataSource = self
+            filePreviewController.toolbarItems = [item1, item2, item3]
+            navigationController?.pushViewController(filePreviewController, animated: true)
+            let navigation = UINavigationController(rootViewController: filePreviewController)
+            showFilePreviewController(navigation, fromView: sender)
+        }
+         */
     }
     
     // MARK: Demo for FilePreviewController
@@ -66,14 +65,16 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
     }
     
     func previewController(controller: QLPreviewController, previewItemAtIndex index: Int) -> QLPreviewItem {
-//        let str3 = "https://www.google.com/intl/zh-CN/policies/privacy/google_privacy_policy_zh-CN.pdf"
-        let str4 = "https://striker.teambition.net/storage/100cfe416a89a6ba84f3aa5820fad968147e?download=Teambition_API%E9%94%99%E8%AF%AF%E7%A0%81%E5%AE%9A%E4%B9%89.csv&Signature=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzEwMGNmZTQxNmE4OWE2YmE4NGYzYWE1ODIwZmFkOTY4MTQ3ZSIsImV4cCI6MTQ2NDEzNDQwMH0.b4JXuW9tMnYAor4QqDhcmv5bSb6cgRvmbg_nTfcfZ3s"
-        let url = NSURL(string: str4)
+        let url = NSURL(string: jpg)
         let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good File", fileExtension: "csv")
         return item
     }
     
-    func previewController(controller: FilePreviewController, failedToLoadRemotePreviewItem item: QLPreviewItem, error: NSError) {
+    func previewController(controller: FilePreviewController, failedToLoadRemotePreviewItem item: FilePreviewItem, error: NSError) {
+    }
+
+    func previewController(controller: FilePreviewController, willShareItem item: FilePreviewItem) {
+        print("Custom Share Action")
     }
 
     func createWebView() {
