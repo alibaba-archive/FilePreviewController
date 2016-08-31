@@ -14,10 +14,16 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
     let jpg = "https://pic4.zhimg.com/b06cb1c48ef44b75911c6f11fc8b68b7_b.jpg"
     var filePreviewController: FilePreviewController?
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        print("filePathComponent: \(FilePreviewControllerConstants.filePathComponent)")
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     @IBAction func buttonTap(sender: UIButton) {
         let item1 = FPActionBarItem(title: "ONE", style: .Plain) { (controller, _) in
             let viewController = UIViewController()

@@ -11,6 +11,10 @@ import QuickLook
 import Alamofire
 import UIKit
 
+public struct FilePreviewControllerConstants {
+   public static let filePathComponent = "com.teambition.RemoteQuickLook"
+}
+
 public extension String {
     public func MD5() -> String {
         return (self as NSString).MD5() as String
@@ -42,7 +46,7 @@ public func localFilePathFor(URL: NSURL, fileName: String? = nil, fileExtension:
     guard var cacheDirectory = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true).last else {
         return nil
     }
-    cacheDirectory = cacheDirectory.stringByAppendingPathComponent("com.teambition.RemoteQuickLook")
+    cacheDirectory = cacheDirectory.stringByAppendingPathComponent(FilePreviewControllerConstants.filePathComponent)
     cacheDirectory = cacheDirectory.stringByAppendingPathComponent(hashedURL)
     var isDirectory: ObjCBool = false
     if !NSFileManager.defaultManager().fileExistsAtPath(cacheDirectory, isDirectory: &isDirectory) || !isDirectory {
