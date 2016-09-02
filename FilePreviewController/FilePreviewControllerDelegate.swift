@@ -19,6 +19,6 @@ public extension FilePreviewControllerDelegate {
     }
     
     func previewController(controller: FilePreviewController, willShareItem item: FilePreviewItem) {
-        controller.defautlShareActivity()
+        controller.showDefautlShareActivity()
     }
 }

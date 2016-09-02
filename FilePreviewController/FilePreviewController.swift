@@ -153,7 +153,9 @@ public class FilePreviewController: QLPreviewController {
     }()
     lazy var rightBarButtonItem: UIBarButtonItem = {
         let shareImage = UIImage(named: "icon-share", inBundle: NSBundle.init(forClass: FilePreviewController.self), compatibleWithTraitCollection: nil)
-        return UIBarButtonItem(image: shareImage, style: .Plain, target: self, action: #selector(showShareActivity))
+        let item = UIBarButtonItem(image: shareImage, style: .Plain, target: self, action: #selector(showShareActivity))
+        item.enabled = false
+        return item
     }()
     var isObserving = false
     var isFullScreen = false
@@ -168,15 +170,6 @@ public class FilePreviewController: QLPreviewController {
     
     public weak var controllerDelegate: FilePreviewControllerDelegate?
     
-//    override public weak var dataSource: QLPreviewControllerDataSource? {
-//        get {
-//            return originalDataSource
-//        }
-//        set {
-//            super.dataSource = self
-//            originalDataSource = newValue
-//        }
-//    }
     var interactionController: UIDocumentInteractionController?
 
     override public func viewDidLoad() {
@@ -285,11 +278,11 @@ public extension FilePreviewController {
         if let delegate = controllerDelegate {
             delegate.previewController(self, willShareItem: previewItem)
         } else {
-            defautlShareActivity()
+            showDefautlShareActivity()
         }
     }
 
-    func defautlShareActivity() {
+    public func showDefautlShareActivity() {
         if let previewItemURL = currentPreviewItem?.previewItemURL {
             interactionController = UIDocumentInteractionController(URL: previewItemURL)
             interactionController?.presentOptionsMenuFromBarButtonItem(rightBarButtonItem, animated: true)
@@ -468,6 +461,7 @@ extension FilePreviewController: QLPreviewControllerDataSource {
         let originalPreviewItem = (originalDataSource!.previewController(controller, previewItemAtIndex: index)) as! FilePreviewItem
         
         if originalPreviewItem.previewItemURL.fileURL {
+            rightBarButtonItem.enabled = true
             return originalPreviewItem
         }
         
@@ -491,6 +485,7 @@ extension FilePreviewController: QLPreviewControllerDataSource {
         copyItem.previewItemURL = NSURL.fileURLWithPath(localFilePath)
         
         if NSFileManager.defaultManager().fileExistsAtPath(localFilePath) {
+            rightBarButtonItem.enabled = true
             return copyItem
         } else {
             //Download remote file if cache not exist
