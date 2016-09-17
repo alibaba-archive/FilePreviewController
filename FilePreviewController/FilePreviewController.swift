@@ -37,7 +37,10 @@ public func localFilePathFor(URL: NSURL, fileName: String? = nil, fileExtension:
     var saveName: String?
     if let fileName = fileName?.stringByReplacingOccurrencesOfString("/", withString: ":"), fileExtension = fileExtension {
         saveName = fileName
-        if !fileName.hasSuffix(".\(fileExtension)") {
+//        if !fileName.hasSuffix(".\(fileExtension)") {
+//            saveName = "\(fileName).\(fileExtension)"
+//        }
+        if fileName.componentsSeparatedByString(".").count == 1 {
             saveName = "\(fileName).\(fileExtension)"
         }
     }

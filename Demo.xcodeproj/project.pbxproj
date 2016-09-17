@@ -13,6 +13,8 @@
 		4A6BC7931C76F8C500DACDA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A6BC7921C76F8C500DACDA5 /* Assets.xcassets */; };
 		4A6BC7961C76F8C500DACDA5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A6BC7941C76F8C500DACDA5 /* LaunchScreen.storyboard */; };
 		4A725BBA1C7D947800244964 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A725BB91C7D947800244964 /* Alamofire.framework */; };
+		AC4B400D1D8D173C004A189D /* FilePreviewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC4B400C1D8D173C004A189D /* FilePreviewController.framework */; };
+		AC4B400E1D8D173C004A189D /* FilePreviewController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = AC4B400C1D8D173C004A189D /* FilePreviewController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -22,6 +24,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				AC4B400E1D8D173C004A189D /* FilePreviewController.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -37,6 +40,7 @@
 		4A6BC7951C76F8C500DACDA5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4A6BC7971C76F8C500DACDA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A725BB91C7D947800244964 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		AC4B400C1D8D173C004A189D /* FilePreviewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; name = FilePreviewController.framework; path = "/Users/zhangxiaolian/Library/Developer/Xcode/DerivedData/FilePreviewController-bsrhegqbraqcqagslateiirtfgpb/Build/Products/Debug-iphonesimulator/FilePreviewController.framework"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +49,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A725BBA1C7D947800244964 /* Alamofire.framework in Frameworks */,
+				AC4B400D1D8D173C004A189D /* FilePreviewController.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -54,6 +59,7 @@
 		4A6BC77F1C76F8C500DACDA5 = {
 			isa = PBXGroup;
 			children = (
+				AC4B400C1D8D173C004A189D /* FilePreviewController.framework */,
 				4A725BB91C7D947800244964 /* Alamofire.framework */,
 				4A6BC78A1C76F8C500DACDA5 /* Demo */,
 				4A6BC7891C76F8C500DACDA5 /* Products */,

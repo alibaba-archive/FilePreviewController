@@ -40,9 +40,11 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
         }
         item2.barButtonItem.tintColor = UIColor.blackColor()
         
-        let url = NSURL(string: jpg)
-        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good Good File/Good File.jpg", fileExtension: "jpg")
-
+//        let url = NSURL(string: jpg)
+//        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good Good File/Good File.jpg", fileExtension: "jpg")
+        
+        let mp3 = NSURL(string: "https://striker.teambition.net/storage/100kf674d16270578354550f650a5c245ece?download=Agile-Scrum-Lean%20Startup%E5%BD%95%E9%9F%B3-%E5%A7%9C%E7%BF%94-20160908.mp3&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzEwMGtmNjc0ZDE2MjcwNTc4MzU0NTUwZjY1MGE1YzI0NWVjZSIsImV4cCI6MTQ3NDI0MzIwMH0.15JpJhYPh5w332TmLgGYrQzfT0jsDdRCTlHyz6frfsY")
+        let item = FilePreviewItem(previewItemURL: mp3!, previewItemTitle: "123.mp3", fileExtension: "mpge")
         // Show SingleFilePreviewController, you can also push it into navigation controller
         let singleFilePreviewController = SingleFilePreviewController(previewItem: item)
         singleFilePreviewController.enableShare = true
