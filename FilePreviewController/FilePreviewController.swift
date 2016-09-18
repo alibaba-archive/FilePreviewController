@@ -10,6 +10,26 @@ import Foundation
 import QuickLook
 import Alamofire
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 public struct FilePreviewControllerConstants {
    public static let filePathComponent = "com.teambition.RemoteQuickLook"
@@ -17,49 +37,47 @@ public struct FilePreviewControllerConstants {
 
 public extension String {
     public func MD5() -> String {
-        return (self as NSString).MD5() as String
+        return (self as NSString).md5() as String
     }
     
-    public func stringByAppendingPathComponent(str: String) -> String {
-        return (self as NSString).stringByAppendingPathComponent(str)
+    public func stringByAppendingPathComponent(_ str: String) -> String {
+        return (self as NSString).appendingPathComponent(str)
     }
     
-    public func stringByAppendingPathExtension(str: String) -> String? {
-        return (self as NSString).stringByAppendingPathExtension(str)
+    public func stringByAppendingPathExtension(_ str: String) -> String? {
+        return (self as NSString).appendingPathExtension(str)
     }
 }
 
-public func localFilePathFor(URL: NSURL, fileName: String? = nil, fileExtension: String? = nil) -> String? {
+public func localFilePathFor(_ URL: Foundation.URL, fileName: String? = nil, fileExtension: String? = nil) -> String? {
     var url = URL
-    if let fileExtension = fileExtension where url.pathExtension == nil || url.pathExtension?.characters.count == 0 {
-        url = url.URLByAppendingPathExtension(fileExtension)
+    if let fileExtension = fileExtension, url.pathExtension.characters.count == 0 {
+        url = url.appendingPathExtension(fileExtension)
     }
     var saveName: String?
-    if let fileName = fileName?.stringByReplacingOccurrencesOfString("/", withString: ":"), fileExtension = fileExtension {
+    if let fileName = fileName?.replacingOccurrences(of: "/", with: ":"), let fileExtension = fileExtension {
         saveName = fileName
-//        if !fileName.hasSuffix(".\(fileExtension)") {
-//            saveName = "\(fileName).\(fileExtension)"
-//        }
-        if fileName.componentsSeparatedByString(".").count == 1 {
+        if fileName.components(separatedBy: ".").count == 1 {
             saveName = "\(fileName).\(fileExtension)"
         }
     }
     let hashedURL = URL.absoluteString.MD5()
 
-    guard var cacheDirectory = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.CachesDirectory, NSSearchPathDomainMask.UserDomainMask, true).last else {
+    guard var cacheDirectory = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).last else {
         return nil
     }
     cacheDirectory = cacheDirectory.stringByAppendingPathComponent(FilePreviewControllerConstants.filePathComponent)
     cacheDirectory = cacheDirectory.stringByAppendingPathComponent(hashedURL)
     var isDirectory: ObjCBool = false
-    if !NSFileManager.defaultManager().fileExistsAtPath(cacheDirectory, isDirectory: &isDirectory) || !isDirectory {
+    if !FileManager.default.fileExists(atPath: cacheDirectory, isDirectory: &isDirectory) || !isDirectory.boolValue {
         do {
-            try NSFileManager.defaultManager().createDirectoryAtPath(cacheDirectory, withIntermediateDirectories: true, attributes: nil)
+            try FileManager.default.createDirectory(atPath: cacheDirectory, withIntermediateDirectories: true, attributes: nil)
         } catch _{
             return nil
         }
     }
-    if let lastPathComponent = saveName ?? url.lastPathComponent {
+    let lastPathComponent = saveName ?? url.lastPathComponent
+    if lastPathComponent.characters.count > 0 {
         // add extra directory to keep original file name when share
         cacheDirectory = cacheDirectory.stringByAppendingPathComponent(lastPathComponent)
     }
@@ -67,14 +85,14 @@ public func localFilePathFor(URL: NSURL, fileName: String? = nil, fileExtension:
     return cacheDirectory
 }
 
-public class FilePreviewItem: NSObject, QLPreviewItem {
-    public var previewItemURL: NSURL
-    public var previewItemTitle: String?
+open class FilePreviewItem: NSObject, QLPreviewItem {
+    open var previewItemURL: URL?
+    open var previewItemTitle: String?
     
     /// when fileExtension is nil, will try to get pathExtension from previewItemURL
-    public var fileExtension: String?
+    open var fileExtension: String?
     
-    public init(previewItemURL: NSURL, previewItemTitle: String? = nil, fileExtension: String? = nil) {
+    public init(previewItemURL: URL?, previewItemTitle: String? = nil, fileExtension: String? = nil) {
         self.previewItemURL = previewItemURL
         self.previewItemTitle = previewItemTitle
         self.fileExtension = fileExtension
@@ -84,12 +102,12 @@ public class FilePreviewItem: NSObject, QLPreviewItem {
 
 private var myContext = 0
 
-public class FilePreviewController: QLPreviewController {
+open class FilePreviewController: QLPreviewController {
     
     /// if header is not nil, Alamofire will use it for authentication
-    public var headers: [String: String]?
-    public var enableShare = true
-    public var actionItems = [FPActionBarItem]() {
+    open var headers: [String: String]?
+    open var enableShare = true
+    open var actionItems = [FPActionBarItem]() {
         willSet {
             for item in newValue {
                 item.filePreviewController = self
@@ -99,20 +117,20 @@ public class FilePreviewController: QLPreviewController {
             toolbarItems = actionItems.map { $0.barButtonItem }
         }
     }
-    override public var toolbarItems: [UIBarButtonItem]? {
+    override open var toolbarItems: [UIBarButtonItem]? {
         didSet {
             items = toolbarItems
         }
     }
-    public var items: [UIBarButtonItem]?
-    public lazy var bottomProgressView: UIProgressView = {
-        let progressView = UIProgressView(progressViewStyle: .Bar)
+    open var items: [UIBarButtonItem]?
+    open lazy var bottomProgressView: UIProgressView = {
+        let progressView = UIProgressView(progressViewStyle: .bar)
         progressView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 2)
-        progressView.autoresizingMask = [.FlexibleWidth, .FlexibleBottomMargin]
-        progressView.tintColor = UIColor.blueColor()
+        progressView.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
+        progressView.tintColor = UIColor.blue
         return progressView
     }()
-    private var shouldDisplayToolbar: Bool {
+    fileprivate var shouldDisplayToolbar: Bool {
         get {
             return items?.count > 0
         }
@@ -129,7 +147,7 @@ public class FilePreviewController: QLPreviewController {
 
         if let navigationBar = bar {
             if !self.isObserving {
-                navigationBar.addObserver(self, forKeyPath: "center", options: [.New, .Old], context: &myContext)
+                navigationBar.addObserver(self, forKeyPath: "center", options: [.new, .old], context: &myContext)
                 self.isObserving = true
             }
         }
@@ -146,18 +164,18 @@ public class FilePreviewController: QLPreviewController {
                 }
             }
         }
-        bar?.tintColor = UIColor.whiteColor()
+        bar?.tintColor = UIColor.white
         return bar
     }()
     var customNavigationBar: UINavigationBar?
     lazy var leftBarButtonItem: UIBarButtonItem = {
-        let crossImage = UIImage(named: "icon-cross", inBundle: NSBundle.init(forClass: FilePreviewController.self), compatibleWithTraitCollection: nil)
-        return UIBarButtonItem(image: crossImage, style: .Plain, target: self, action: #selector(dismissSelf))
+        let crossImage = UIImage(named: "icon-cross", in: Bundle.init(for: FilePreviewController.self), compatibleWith: nil)
+        return UIBarButtonItem(image: crossImage, style: .plain, target: self, action: #selector(dismissSelf))
     }()
     lazy var rightBarButtonItem: UIBarButtonItem = {
-        let shareImage = UIImage(named: "icon-share", inBundle: NSBundle.init(forClass: FilePreviewController.self), compatibleWithTraitCollection: nil)
-        let item = UIBarButtonItem(image: shareImage, style: .Plain, target: self, action: #selector(showShareActivity))
-        item.enabled = false
+        let shareImage = UIImage(named: "icon-share", in: Bundle.init(for: FilePreviewController.self), compatibleWith: nil)
+        let item = UIBarButtonItem(image: shareImage, style: .plain, target: self, action: #selector(showShareActivity))
+        item.isEnabled = false
         return item
     }()
     var isObserving = false
@@ -171,25 +189,25 @@ public class FilePreviewController: QLPreviewController {
     
     var toolbarBottomConstraint: NSLayoutConstraint?
     
-    public weak var controllerDelegate: FilePreviewControllerDelegate?
+    open weak var controllerDelegate: FilePreviewControllerDelegate?
     
     var interactionController: UIDocumentInteractionController?
 
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
-        let crossImage = UIImage(named: "icon-cross", inBundle: NSBundle.init(forClass: FilePreviewController.self), compatibleWithTraitCollection: nil)
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: crossImage, style: .Plain, target: self, action: #selector(dismissSelf))
+        let crossImage = UIImage(named: "icon-cross", in: Bundle.init(for: FilePreviewController.self), compatibleWith: nil)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: crossImage, style: .plain, target: self, action: #selector(dismissSelf))
     }
     
-    override public func viewDidLayoutSubviews() {
+    override open func viewDidLayoutSubviews() {
         layoutToolbar()
     }
 
-    override public func viewWillAppear(animated: Bool) {
+    override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if let navigationBar = navigationBar, container = navigationBar.superview {
+        if let navigationBar = navigationBar, let container = navigationBar.superview {
             let bar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 64))
-            bar.autoresizingMask = [.FlexibleWidth]
+            bar.autoresizingMask = [.flexibleWidth]
             container.addSubview(bar)
             let item = UINavigationItem(title: navigationItem.title ?? "")
             item.leftBarButtonItem = leftBarButtonItem
@@ -197,7 +215,7 @@ public class FilePreviewController: QLPreviewController {
                 item.rightBarButtonItem = rightBarButtonItem
             }
             item.hidesBackButton = true
-            bar.pushNavigationItem(item, animated: true)
+            bar.pushItem(item, animated: true)
             customNavigationBar = bar
         }
     }
@@ -208,40 +226,40 @@ public class FilePreviewController: QLPreviewController {
         }
     }
     
-    override public func viewWillDisappear(animated: Bool) {
+    override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         cancelProgress()
         customNavigationBar?.removeFromSuperview()
     }
     
-    override public func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        if context == &myContext, let keyPath = keyPath where keyPath == "center", let object = object as? UINavigationBar where object == navigationBar {
+    override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if context == &myContext, let keyPath = keyPath , keyPath == "center", let object = object as? UINavigationBar , object == navigationBar {
             if let change = change {
-                if let new = change[NSKeyValueChangeNewKey] as? NSValue {
-                    let point = new.CGPointValue()
+                if let new = change[NSKeyValueChangeKey.newKey] as? NSValue {
+                    let point = new.cgPointValue
                     if !isFullScreen && point.y < 0 {
                         toolbarBottomConstraint?.constant = -44
                         isFullScreen = true
-                        UIView.animateWithDuration(0.2, animations: {
+                        UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
                             self.customNavigationBar?.frame.origin.y = -64
                             self.navigationBar?.superview?.layoutIfNeeded()
                             }, completion: { (_) in
-                                self.originalToolbar?.hidden = true
-                                self.navigationBar?.superview?.sendSubviewToBack(self.navigationBar!)
+                                self.originalToolbar?.isHidden = true
+                                self.navigationBar?.superview?.sendSubview(toBack: self.navigationBar!)
                         })
                     } else if isFullScreen && point.y > 0 {
                         toolbarBottomConstraint?.constant = shouldDisplayToolbar ? 0 : -45
                         isFullScreen = false
-                        UIView.animateWithDuration(0.2, animations: {
+                        UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
                             self.customNavigationBar?.frame.origin.y = 0
                             self.navigationBar?.superview?.layoutIfNeeded()
-                            self.originalToolbar?.hidden = true
-                            self.navigationBar?.superview?.bringSubviewToFront(self.customNavigationBar!)
+                            self.originalToolbar?.isHidden = true
+                            self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
                             }, completion: { (_) in
-                                self.navigationBar?.superview?.bringSubviewToFront(self.customNavigationBar!)
-                                self.originalToolbar?.hidden = true
+                                self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
+                                self.originalToolbar?.isHidden = true
                         })
                     }
                     setNeedsStatusBarAppearanceUpdate()
@@ -250,7 +268,7 @@ public class FilePreviewController: QLPreviewController {
         }
     }
 
-    override public func prefersStatusBarHidden() -> Bool {
+    override open var prefersStatusBarHidden : Bool {
         return isFullScreen
     }
     
@@ -287,8 +305,8 @@ public extension FilePreviewController {
 
     public func showDefautlShareActivity() {
         if let previewItemURL = currentPreviewItem?.previewItemURL {
-            interactionController = UIDocumentInteractionController(URL: previewItemURL)
-            interactionController?.presentOptionsMenuFromBarButtonItem(rightBarButtonItem, animated: true)
+            interactionController = UIDocumentInteractionController(url: previewItemURL)
+            interactionController?.presentOptionsMenu(from: rightBarButtonItem, animated: true)
         }
     }
 }
@@ -308,46 +326,43 @@ public extension FilePreviewController {
 }
 
 extension FilePreviewController {
-    func downloadFor(item: FilePreviewItem) {
+    func downloadFor(_ item: FilePreviewItem) {
         
-        UIApplication.sharedApplication().networkActivityIndicatorVisible = true
-        guard let localFilePath = localFilePathFor(item.previewItemURL, fileName: item.previewItemTitle, fileExtension: item.fileExtension) else {
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        guard let previewItemUrl = item.previewItemURL, let localFilePath = localFilePathFor(previewItemUrl, fileName: item.previewItemTitle, fileExtension: item.fileExtension) else {
             if let controllerDelegate = self.controllerDelegate {
-                let error = Error.errorWithCode(.LocalCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")
+                let error = FPError.errorWithCode(.localCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")
                 controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: item, error: error)
             }
             return
         }
-        
-        download(.GET, item.previewItemURL.absoluteString, parameters: nil, encoding:.URL, headers: headers) { (temporaryURL, response) -> NSURL in
-            
-            let localFileURL = NSURL.fileURLWithPath(localFilePath)
-            return localFileURL
-            }.progress { (bytesReceived, totalBytesReceived, totalBytesExpectedToReceived) -> Void in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    var progress = CGFloat(totalBytesReceived) / CGFloat(totalBytesExpectedToReceived)
-                    if progress < 0 {
-                        progress = 0.5
-                    }
-                    self.updateProgress(progress)
-                })
-            }.response {(_, response, _, error) -> Void in
-                UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-                self.cancelProgress()
-                if let error = error {
-                    if let controllerDelegate = self.controllerDelegate {
-                        let rasieError = Error.errorWithCode(.RemoteFileDownloadFailed, failureReason: "Download remote file failed", error: error)
-                        controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: item, error: rasieError)
-                    }
-                } else {
-                    self.refreshCurrentPreviewItem()
+        let destination: DownloadRequest.DownloadFileDestination = { _, _ in
+            return (URL(fileURLWithPath: localFilePath), [.createIntermediateDirectories, .removePreviousFile])
+        }
+        download(previewItemUrl.absoluteString, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers, to: destination).downloadProgress(queue: DispatchQueue.main) { (progress) in
+            var progress = CGFloat(progress.completedUnitCount) / CGFloat(progress.totalUnitCount)
+            if progress < 0 {
+                progress = 0.5
+            }
+            self.updateProgress(progress)
+        }
+        .response { response in
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            self.cancelProgress()
+            if let error = response.error {
+                if let controllerDelegate = self.controllerDelegate {
+                    let rasieError = FPError.errorWithCode(.remoteFileDownloadFailed, failureReason: "Download remote file failed", error: error)
+                    controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: item, error: rasieError)
                 }
+            } else {
+                self.refreshCurrentPreviewItem()
+            }
         }
     }
     
-    func updateProgress(newProgress: CGFloat) {
+    func updateProgress(_ newProgress: CGFloat) {
         if progressBar == nil {
-            progressBar = UIProgressView(progressViewStyle: .Bar)
+            progressBar = UIProgressView(progressViewStyle: .bar)
             progressBar?.progress = 0.1
             layoutProgressBar()
         }
@@ -365,7 +380,7 @@ extension FilePreviewController {
         guard let progressBar = progressBar else {
             return
         }
-        UIView.animateWithDuration(0.5, animations: { () -> Void in
+        UIView.animate(withDuration: 0.5, animations: { () -> Void in
             progressBar.alpha = 0
             }, completion: { (_) -> Void in
                 progressBar.removeFromSuperview()
@@ -373,42 +388,42 @@ extension FilePreviewController {
     }
     
     func layoutProgressBar() {
-        guard let navigationBar = customNavigationBar, progressBar = progressBar else {
+        guard let navigationBar = customNavigationBar, let progressBar = progressBar else {
             return
         }
         if !navigationBar.subviews.contains(progressBar) {
             progressBar.tintColor = navigationBar.tintColor
             navigationBar.addSubview(progressBar)
         }
-        let navigationBarHeight = CGRectGetHeight(navigationBar.frame)
-        let navigationBarWidth = CGRectGetWidth(navigationBar.frame)
-        let progressBarHeight = CGRectGetHeight(progressBar.frame)
-        progressBar.frame = CGRectMake(0, navigationBarHeight - progressBarHeight, navigationBarWidth, progressBarHeight)
+        let navigationBarHeight = navigationBar.frame.height
+        let navigationBarWidth = navigationBar.frame.width
+        let progressBarHeight = progressBar.frame.height
+        progressBar.frame = CGRect(x: 0, y: navigationBarHeight - progressBarHeight, width: navigationBarWidth, height: progressBarHeight)
     }
     
     func layoutToolbar() {
-        originalToolbar?.hidden = true
+        originalToolbar?.isHidden = true
         if toolbar == nil {
             toolbar = UIToolbar()
             if let toolbar = toolbar {
                 view.addSubview(toolbar)
                 toolbar.translatesAutoresizingMaskIntoConstraints = false
-                view.addConstraints(NSLayoutConstraint.constraintsWithVisualFormat("H:|-0-[toolbar]-0-|", options: [], metrics: nil , views: ["toolbar":toolbar]))
-                toolbar.addConstraint(NSLayoutConstraint(item: toolbar, attribute: .Height, relatedBy: .Equal, toItem: nil, attribute: .NotAnAttribute, multiplier: 1.0, constant: 44))
-                toolbarBottomConstraint = NSLayoutConstraint(item: view, attribute: .Bottom, relatedBy: .Equal, toItem: toolbar, attribute: .Bottom, multiplier: 1.0, constant: 0)
+                view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[toolbar]-0-|", options: [], metrics: nil , views: ["toolbar":toolbar]))
+                toolbar.addConstraint(NSLayoutConstraint(item: toolbar, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 44))
+                toolbarBottomConstraint = NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: toolbar, attribute: .bottom, multiplier: 1.0, constant: 0)
                 view.addConstraint(toolbarBottomConstraint!)
             }
 
-            guard let toolbar = toolbar, items = items where items.count > 0 else {
+            guard let toolbar = toolbar, let items = items , items.count > 0 else {
                 toolbarBottomConstraint?.constant = -44
                 return
             }
-            let flexSpace = UIBarButtonItem(barButtonSystemItem: .FlexibleSpace, target: self, action: nil)
-            let fixedSpace = UIBarButtonItem(barButtonSystemItem: .FixedSpace, target: self, action: nil)
+            let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+            let fixedSpace = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: self, action: nil)
             fixedSpace.width = 72
             
             var itemsArray = [UIBarButtonItem]()
-            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 itemsArray.append(flexSpace)
                 for item in items {
                     itemsArray.append(item)
@@ -433,16 +448,16 @@ extension FilePreviewController {
             }
             
             toolbar.setItems(itemsArray, animated: false)
-            toolbar.tintColor = UIColor.whiteColor()
+            toolbar.tintColor = UIColor.white
         }
         if let toolbar = toolbar {
-            view.bringSubviewToFront(toolbar)
+            view.bringSubview(toFront: toolbar)
         }
     }
     
-    public override func viewWillTransitionToSize(size: CGSize, withTransitionCoordinator coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransitionToSize(size, withTransitionCoordinator: coordinator)
-        coordinator.animateAlongsideTransition({ (_) -> Void in
+    open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { (_) -> Void in
             self.layoutProgressBar()
             }, completion: nil)
     }
@@ -451,20 +466,23 @@ extension FilePreviewController {
 extension FilePreviewController: QLPreviewControllerDataSource {
     
     //This method is required to expose, don't call it
-    public func numberOfPreviewItemsInPreviewController(controller: QLPreviewController) -> Int {
+    public func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
         guard let originalDataSource = originalDataSource else {
             return 0
         }
-        return originalDataSource.numberOfPreviewItemsInPreviewController(controller)
+        return originalDataSource.numberOfPreviewItems(in: controller)
     }
     
     //This method is required to expose, don't call it
-    public func previewController(controller: QLPreviewController, previewItemAtIndex index: Int) -> QLPreviewItem {
+    public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
         
-        let originalPreviewItem = (originalDataSource!.previewController(controller, previewItemAtIndex: index)) as! FilePreviewItem
+        let originalPreviewItem = (originalDataSource!.previewController(controller, previewItemAt: index)) as! FilePreviewItem
         
-        if originalPreviewItem.previewItemURL.fileURL {
-            rightBarButtonItem.enabled = true
+        guard let previewItemURL = originalPreviewItem.previewItemURL else {
+            return originalPreviewItem
+        }
+        if previewItemURL.isFileURL {
+            rightBarButtonItem.isEnabled = true
             return originalPreviewItem
         }
         
@@ -477,24 +495,24 @@ extension FilePreviewController: QLPreviewControllerDataSource {
             copyItem = FilePreviewItem(previewItemURL: originalPreviewItem.previewItemURL)
         }
         
-        guard let localFilePath = localFilePathFor(originalPreviewItem.previewItemURL, fileName: originalPreviewItem.previewItemTitle, fileExtension: originalPreviewItem.fileExtension) else {
+        guard let localFilePath = localFilePathFor(previewItemURL, fileName: originalPreviewItem.previewItemTitle, fileExtension: originalPreviewItem.fileExtension) else {
             //failed to get local file path
             if let controllerDelegate = self.controllerDelegate {
-                let error = Error.errorWithCode(.LocalCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")
+                let error = FPError.errorWithCode(.localCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")
                 controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: originalPreviewItem, error: error)
             }
             return originalPreviewItem
         }
-        copyItem.previewItemURL = NSURL.fileURLWithPath(localFilePath)
+        copyItem.previewItemURL = URL(fileURLWithPath: localFilePath)
         
-        if NSFileManager.defaultManager().fileExistsAtPath(localFilePath) {
-            rightBarButtonItem.enabled = true
+        if FileManager.default.fileExists(atPath: localFilePath) {
+            rightBarButtonItem.isEnabled = true
             return copyItem
         } else {
             //Download remote file if cache not exist
             downloadFor(originalPreviewItem)
         }
-        
+        copyItem.previewItemURL = nil
         return copyItem
     }
 }

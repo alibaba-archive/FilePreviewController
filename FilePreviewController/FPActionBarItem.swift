@@ -12,15 +12,15 @@ import Foundation
 
 public typealias BarActionClosure = (FilePreviewController, FPActionBarItem) -> Void
 
-public class FPActionBarItem: NSObject {
-    public var barButtonItem: UIBarButtonItem!
-    public var action: BarActionClosure?
-    public weak var filePreviewController: FilePreviewController?
+open class FPActionBarItem: NSObject {
+    open var barButtonItem: UIBarButtonItem!
+    open var action: BarActionClosure?
+    open weak var filePreviewController: FilePreviewController?
     
     public init(title: String?, style: UIBarButtonItemStyle, action: BarActionClosure? = nil) {
         super.init()
         self.action = action
-        barButtonItem = UIBarButtonItem(title: title, style: .Plain, target: self, action: #selector(FPActionBarItem.triggerAction))
+        barButtonItem = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(FPActionBarItem.triggerAction))
     }
     
     public init(image: UIImage?, style: UIBarButtonItemStyle, action: BarActionClosure? = nil) {
@@ -36,7 +36,7 @@ public class FPActionBarItem: NSObject {
     }
     
     func triggerAction() {
-        guard let filePreviewController = filePreviewController, action = action else {
+        guard let filePreviewController = filePreviewController, let action = action else {
             return
         }
         action(filePreviewController, self)
@@ -44,16 +44,16 @@ public class FPActionBarItem: NSObject {
 }
 
 public extension FilePreviewController {
-    func addActionBarItem(title title: String?, style: UIBarButtonItemStyle, action: BarActionClosure?) {
+    func addActionBarItem(title: String?, style: UIBarButtonItemStyle, action: BarActionClosure?) {
         let barItem = FPActionBarItem(title: title, style: style, action: action)
         barItem.filePreviewController = self
         actionItems.append(barItem)
     }
     
-    func insert(actionBarItem: FPActionBarItem, at index: Int) {
+    func insert(_ actionBarItem: FPActionBarItem, at index: Int) {
         let barItem = actionBarItem
         barItem.filePreviewController = self
-        actionItems.insert(barItem, atIndex: index)
+        actionItems.insert(barItem, at: index)
     }
     
     func removeAllToolbarItems() {

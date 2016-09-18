@@ -8,24 +8,24 @@
 
 import Foundation
 
-public struct Error {
+public struct FPError {
     
     public static let Domain = "com.filepreviewcontroller.error"
     public static let RelatedErrorKey = "com.filepreviewcontroller.error.relatederror"
     
     public enum Code: Int {
-        case LocalCacheDirectoryCreateFailed    = -7001
-        case RemoteFileDownloadFailed           = -7002
+        case localCacheDirectoryCreateFailed    = -7001
+        case remoteFileDownloadFailed           = -7002
     }
     
-    public static func errorWithCode(code: Code, failureReason: String, error: NSError? = nil) -> NSError {
+    public static func errorWithCode(_ code: Code, failureReason: String, error: Error? = nil) -> NSError {
         return errorWithCode(code.rawValue, failureReason: failureReason, error: nil)
     }
     
-    public static func errorWithCode(code: Int, failureReason: String, error: NSError?) -> NSError {
-        var userInfo: [String: AnyObject] = [NSLocalizedDescriptionKey: failureReason]
+    public static func errorWithCode(_ code: Int, failureReason: String, error: Error?) -> NSError {
+        var userInfo: [String: AnyObject] = [NSLocalizedDescriptionKey: failureReason as AnyObject]
         if let error = error {
-           userInfo[RelatedErrorKey] = error
+           userInfo[RelatedErrorKey] = error as AnyObject?
         }
         return NSError(domain: Domain, code: code, userInfo: userInfo)
     }

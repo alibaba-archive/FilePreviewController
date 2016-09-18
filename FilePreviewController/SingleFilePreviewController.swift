@@ -9,7 +9,7 @@
 import Foundation
 import QuickLook
 
-public class SingleFilePreviewController: FilePreviewController {
+open class SingleFilePreviewController: FilePreviewController {
     var singleItemDataSource: SingleItemDataSource!
  
     public init(previewItem: FilePreviewItem) {
@@ -23,7 +23,7 @@ public class SingleFilePreviewController: FilePreviewController {
         super.init(coder: aDecoder)
     }
 
-    public override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
     }
 }
@@ -36,11 +36,11 @@ class SingleItemDataSource: NSObject, QLPreviewControllerDataSource {
         self.previewItem = previewItem
     }
 
-    func numberOfPreviewItemsInPreviewController(controller: QLPreviewController) -> Int {
+    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
         return 1
     }
 
-    func previewController(controller: QLPreviewController, previewItemAtIndex index: Int) -> QLPreviewItem {
+    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
         return previewItem!
     }
 }

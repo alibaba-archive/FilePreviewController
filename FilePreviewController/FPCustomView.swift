@@ -8,17 +8,17 @@
 
 import UIKit
 
-public class GradientToolbar: UIToolbar {
+open class GradientToolbar: UIToolbar {
     
     var gradientView = GradientView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setBackgroundImage(UIImage(), forToolbarPosition: .Any, barMetrics: .Default)
+        setBackgroundImage(UIImage(), forToolbarPosition: .any, barMetrics: .default)
         clipsToBounds = true
         addSubview(gradientView)
-        gradientView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        gradientView.colors = [UIColor.blackColor().colorWithAlphaComponent(0.48).CGColor, UIColor.blackColor().colorWithAlphaComponent(0).CGColor]
+        gradientView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        gradientView.colors = [UIColor.black.withAlphaComponent(0.48).cgColor, UIColor.black.withAlphaComponent(0).cgColor]
         gradientView.startPoint = CGPoint(x: 0, y: 1)
         gradientView.endPoint = CGPoint(x: 0, y: 0)
     }
@@ -32,7 +32,7 @@ class GradientView: UIView {
     
     var colors: [AnyObject]? {
         get {
-            return (layer as! CAGradientLayer).colors
+            return (layer as! CAGradientLayer).colors as [AnyObject]?
         }
         set {
             (layer as! CAGradientLayer).colors = newValue
@@ -57,7 +57,7 @@ class GradientView: UIView {
         }
     }
     
-    override class func layerClass() -> AnyClass {
+    override class var layerClass : AnyClass {
         return CAGradientLayer.self
     }
 }
