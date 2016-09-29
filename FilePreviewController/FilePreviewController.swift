@@ -123,7 +123,7 @@ open class FilePreviewController: QLPreviewController {
         }
     }
     open var items: [UIBarButtonItem]?
-    open lazy var bottomProgressView: UIProgressView = {
+    fileprivate lazy var bottomProgressView: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .bar)
         progressView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 2)
         progressView.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
