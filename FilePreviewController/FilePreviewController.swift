@@ -61,7 +61,12 @@ public func localFilePathFor(_ URL: Foundation.URL, fileName: String? = nil, fil
             saveName = "\(fileName).\(fileExtension)"
         }
     }
-    let hashedURL = URL.absoluteString.MD5()
+    
+    var URLString = URL.absoluteString
+    if let query = URL.query {
+        URLString = URL.absoluteString.replacingOccurrences(of: query, with: "")
+    }
+    let hashedURL = URLString.MD5()
 
     guard var cacheDirectory = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).last else {
         return nil

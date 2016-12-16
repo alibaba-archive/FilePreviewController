@@ -43,8 +43,8 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
 //        let url = NSURL(string: jpg)
 //        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good Good File/Good File.jpg", fileExtension: "jpg")
         
-        let mp3 = URL(string: "https://striker.teambition.net/storage/100kf674d16270578354550f650a5c245ece?download=Agile-Scrum-Lean%20Startup%E5%BD%95%E9%9F%B3-%E5%A7%9C%E7%BF%94-20160908.mp3&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzEwMGtmNjc0ZDE2MjcwNTc4MzU0NTUwZjY1MGE1YzI0NWVjZSIsImV4cCI6MTQ3NDI0MzIwMH0.15JpJhYPh5w332TmLgGYrQzfT0jsDdRCTlHyz6frfsY")
-        let item = FilePreviewItem(previewItemURL: mp3!, previewItemTitle: "123.mp3", fileExtension: "mpge")
+        let mp3 = URL(string: "https://www.teambition.com/api/works/5853a4fc2ed98806395f58b3/download/%25E6%259C%25AA%25E5%2591%25BD%25E5%2590%258D.txt.txt?signature=eyJhbGciOiJIUzI1NiJ9.eyJfd29ya0lkIjoiNTg1M2E0ZmMyZWQ5ODgwNjM5NWY1OGIzIiwiZmlsZUtleSI6IjEwMG4wNzBmMWYwYjc1YjRlZjMyOTQ3MmU1YTJmMmY1ZWY2MyIsIl91c2VySWQiOiI1MmE2Y2MyZGVmNjZiYzk4MGMwMDAzMTIiLCJleHAiOjE0ODIwNTE4NDksInN0b3JhZ2UiOiJzdHJpa2VyLWh6In0.EWuP56TtVpUtBIUZnj-3ZcB5M8YOSRY-2uHRpglcXiQ")
+        let item = FilePreviewItem(previewItemURL: mp3!, previewItemTitle: "123.text", fileExtension: "text")
         // Show SingleFilePreviewController, you can also push it into navigation controller
         let singleFilePreviewController = SingleFilePreviewController(previewItem: item)
         singleFilePreviewController.enableShare = true
