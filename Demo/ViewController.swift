@@ -43,8 +43,8 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
 //        let url = NSURL(string: jpg)
 //        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good Good File/Good File.jpg", fileExtension: "jpg")
         
-        let mp3 = URL(string: "https://www.teambition.com/api/works/5853a4fc2ed98806395f58b3/download/%25E6%259C%25AA%25E5%2591%25BD%25E5%2590%258D.txt.txt?signature=eyJhbGciOiJIUzI1NiJ9.eyJfd29ya0lkIjoiNTg1M2E0ZmMyZWQ5ODgwNjM5NWY1OGIzIiwiZmlsZUtleSI6IjEwMG4wNzBmMWYwYjc1YjRlZjMyOTQ3MmU1YTJmMmY1ZWY2MyIsIl91c2VySWQiOiI1MmE2Y2MyZGVmNjZiYzk4MGMwMDAzMTIiLCJleHAiOjE0ODIwNTE4NDksInN0b3JhZ2UiOiJzdHJpa2VyLWh6In0.EWuP56TtVpUtBIUZnj-3ZcB5M8YOSRY-2uHRpglcXiQ")
-        let item = FilePreviewItem(previewItemURL: mp3!, previewItemTitle: "123.text", fileExtension: "text")
+        let mp3 = URL(string: "https://www.teambition.com/api/works/590ae21bc27e18cd1421d405/download/304_best_practices_for_building_apps_used_in_business_and_education.pdf?signature=eyJhbGciOiJIUzI1NiJ9.eyJfd29ya0lkIjoiNTkwYWUyMWJjMjdlMThjZDE0MjFkNDA1IiwiZmlsZUtleSI6IjEwMHM0YzFkM2E5ZWJmYzc1OWUxMzE5NDVhNTA1YzJiZGE0MiIsIl91c2VySWQiOiI1NDI1NDJmZjg4MmE2YzcwMGJiOTMwNmIiLCJleHAiOjE1MDI1MDI5ODUsInN0b3JhZ2UiOiJzdHJpa2VyLWh6In0.Ldh7RycSNg3Uf3xTmiy8K6yxwQgxyuaveJYwvTLGZL0")
+        let item = FilePreviewItem(previewItemURL: mp3!, previewItemTitle: "304_best_practices_for_building_apps_used_in_business_and_education.pdf", fileExtension: "pdf")
         // Show SingleFilePreviewController, you can also push it into navigation controller
         let singleFilePreviewController = SingleFilePreviewController(previewItem: item)
         singleFilePreviewController.enableShare = true
