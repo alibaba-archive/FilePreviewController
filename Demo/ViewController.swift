@@ -43,8 +43,8 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
 //        let url = NSURL(string: jpg)
 //        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good Good File/Good File.jpg", fileExtension: "jpg")
         
-        let mp3 = URL(string: "https://www.teambition.com/api/works/590ae21bc27e18cd1421d405/download/304_best_practices_for_building_apps_used_in_business_and_education.pdf?signature=eyJhbGciOiJIUzI1NiJ9.eyJfd29ya0lkIjoiNTkwYWUyMWJjMjdlMThjZDE0MjFkNDA1IiwiZmlsZUtleSI6IjEwMHM0YzFkM2E5ZWJmYzc1OWUxMzE5NDVhNTA1YzJiZGE0MiIsIl91c2VySWQiOiI1NDI1NDJmZjg4MmE2YzcwMGJiOTMwNmIiLCJleHAiOjE1MDI1MDI5ODUsInN0b3JhZ2UiOiJzdHJpa2VyLWh6In0.Ldh7RycSNg3Uf3xTmiy8K6yxwQgxyuaveJYwvTLGZL0")
-        let item = FilePreviewItem(previewItemURL: mp3!, previewItemTitle: "304_best_practices_for_building_apps_used_in_business_and_education.pdf", fileExtension: "pdf")
+        let mp3 = URL(string: "https://www.teambition.com/api/works/5934c20b9e97a55baf4f461e/download/RxSwift_v1.0.pdf?signature=eyJhbGciOiJIUzI1NiJ9.eyJfd29ya0lkIjoiNTkzNGMyMGI5ZTk3YTU1YmFmNGY0NjFlIiwiZmlsZUtleSI6IjEzMHRiN2QzZDZmMjg3YWU3ZWYxZDQwZWVjMmY2ODE3NWQ4OSIsIl91c2VySWQiOiI1NDI1NDJmZjg4MmE2YzcwMGJiOTMwNmIiLCJleHAiOjE1MDI4NTk1MDUsInN0b3JhZ2UiOiJzdHJpa2VyLWh6In0.jJO1R3IsPFXmmBKQTVrXakhm8_7qu0ZJpeQCM8qEdRI")
+        let item = FilePreviewItem(previewItemURL: mp3!, previewItemTitle: "RxSwift_v1.0.pdf", fileExtension: "pdf", fileKey: "130tb7d3d6f287ae7ef1d40eec2f68175d89")
         // Show SingleFilePreviewController, you can also push it into navigation controller
         let singleFilePreviewController = SingleFilePreviewController(previewItem: item)
         singleFilePreviewController.enableShare = true
@@ -74,7 +74,7 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
     
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
         let url = URL(string: jpg)
-        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good File", fileExtension: "csv")
+        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good File", fileExtension: "csv", fileKey: "12345678")
         return item
     }
     

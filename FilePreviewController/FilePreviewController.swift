@@ -49,7 +49,7 @@ public extension String {
     }
 }
 
-public func localFilePathFor(_ URL: Foundation.URL, fileName: String? = nil, fileExtension: String? = nil) -> String? {
+public func localFilePathFor(_ URL: Foundation.URL, fileName: String? = nil, fileExtension: String? = nil, fileKey: String?) -> String? {
     var url = URL
     if let fileExtension = fileExtension, url.pathExtension.characters.count == 0 {
         url = url.appendingPathExtension(fileExtension)
@@ -62,11 +62,12 @@ public func localFilePathFor(_ URL: Foundation.URL, fileName: String? = nil, fil
         }
     }
     
-    var URLString = URL.absoluteString
-    if let query = URL.query {
-        URLString = URL.absoluteString.replacingOccurrences(of: query, with: "")
+    let hashedURL: String
+    if let fileKey = fileKey {
+        hashedURL = fileKey
+    } else {
+        hashedURL = URL.absoluteString.MD5()
     }
-    let hashedURL = URLString.MD5()
 
     guard var cacheDirectory = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).last else {
         return nil
@@ -94,12 +95,15 @@ open class FilePreviewItem: NSObject, QLPreviewItem {
     open var previewItemURL: URL?
     open var previewItemTitle: String?
     
-    /// when fileExtension is nil, will try to get pathExtension from previewItemURL
+    // when fileExtension is nil, will try to get pathExtension from previewItemURL
     open var fileExtension: String?
     
-    public init(previewItemURL: URL?, previewItemTitle: String? = nil, fileExtension: String? = nil) {
+    open var fileKey: String?
+    
+    public init(previewItemURL: URL?, previewItemTitle: String? = nil, fileExtension: String? = nil, fileKey: String?) {
         self.previewItemURL = previewItemURL
         self.previewItemTitle = previewItemTitle
+        self.fileKey = fileKey
         self.fileExtension = fileExtension
         super.init()
     }
@@ -334,7 +338,7 @@ extension FilePreviewController {
     func downloadFor(_ item: FilePreviewItem) {
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        guard let previewItemUrl = item.previewItemURL, let localFilePath = localFilePathFor(previewItemUrl, fileName: item.previewItemTitle, fileExtension: item.fileExtension) else {
+        guard let previewItemUrl = item.previewItemURL, let localFilePath = localFilePathFor(previewItemUrl, fileName: item.previewItemTitle, fileExtension: item.fileExtension, fileKey: item.fileKey) else {
             if let controllerDelegate = self.controllerDelegate {
                 let error = FPError.errorWithCode(.localCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")
                 controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: item, error: error)
@@ -495,12 +499,12 @@ extension FilePreviewController: QLPreviewControllerDataSource {
         
         var copyItem: FilePreviewItem!
         if let itemTitle = originalPreviewItem.previewItemTitle {
-            copyItem = FilePreviewItem(previewItemURL: originalPreviewItem.previewItemURL, previewItemTitle: itemTitle)
+            copyItem = FilePreviewItem(previewItemURL: originalPreviewItem.previewItemURL, previewItemTitle: itemTitle, fileKey: originalPreviewItem.fileKey)
         } else {
-            copyItem = FilePreviewItem(previewItemURL: originalPreviewItem.previewItemURL)
+            copyItem = FilePreviewItem(previewItemURL: originalPreviewItem.previewItemURL, fileKey: originalPreviewItem.fileKey)
         }
         
-        guard let localFilePath = localFilePathFor(previewItemURL, fileName: originalPreviewItem.previewItemTitle, fileExtension: originalPreviewItem.fileExtension) else {
+        guard let localFilePath = localFilePathFor(previewItemURL, fileName: originalPreviewItem.previewItemTitle, fileExtension: originalPreviewItem.fileExtension, fileKey: originalPreviewItem.fileKey) else {
             //failed to get local file path
             if let controllerDelegate = self.controllerDelegate {
                 let error = FPError.errorWithCode(.localCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")
