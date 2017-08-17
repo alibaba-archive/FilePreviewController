@@ -11,6 +11,7 @@ import Foundation
 public protocol FilePreviewControllerDelegate: class {
     func previewController(_ controller: FilePreviewController, failedToLoadRemotePreviewItem item:FilePreviewItem, error: NSError)
     func previewController(_ controller: FilePreviewController, willShareItem item: FilePreviewItem)
+    func previewController(_ controller: FilePreviewController, showMoreItems item: FilePreviewItem)
 }
 
 public extension FilePreviewControllerDelegate {
@@ -19,6 +20,10 @@ public extension FilePreviewControllerDelegate {
     }
     
     func previewController(_ controller: FilePreviewController, willShareItem item: FilePreviewItem) {
-        controller.showDefautlShareActivity()
+        controller.showDefaultShareActivity()
+    }
+    
+    func previewController(_ controller: FilePreviewController, showMoreItems item: FilePreviewItem) {
+        print("show more items")
     }
 }

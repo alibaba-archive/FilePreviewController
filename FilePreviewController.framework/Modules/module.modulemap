@@ -1,0 +1,10 @@
+framework module FilePreviewController {
+  umbrella header "FilePreviewController.h"
+
+  export *
+  module * { export * }
+}
+
+module FilePreviewController.Swift {
+    header "FilePreviewController-Swift.h"
+}
