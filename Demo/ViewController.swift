@@ -47,7 +47,7 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
         let item = FilePreviewItem(previewItemURL: mp3!, previewItemTitle: "RxSwift_v1.0.pdf", fileExtension: "pdf", fileKey: "130tb7d3d6f287ae7ef1d40eec2f68175d89")
         // Show SingleFilePreviewController, you can also push it into navigation controller
         let singleFilePreviewController = SingleFilePreviewController(previewItem: item)
-        singleFilePreviewController.enableShare = true
+        singleFilePreviewController.isEnableShare = true
         singleFilePreviewController.actionItems = [item1, item2]
         singleFilePreviewController.controllerDelegate = self
         let navigation = UINavigationController(rootViewController: singleFilePreviewController)
@@ -82,6 +82,10 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
     }
 
     func previewController(_ controller: FilePreviewController, willShareItem item: FilePreviewItem) {
+        print("Custom Share Action")
+    }
+    
+    func previewController(_ controller: FilePreviewController, showMoreItems item: FilePreviewItem) {
         print("Custom Share Action")
     }
 
