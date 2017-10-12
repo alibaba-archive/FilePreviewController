@@ -219,8 +219,14 @@ open class FilePreviewController: QLPreviewController {
         layoutToolbar()
     }
 
+    open override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .default
+    }
+
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.barStyle = .default
+
         if let navigationBar = navigationBar, let container = navigationBar.superview {
             let bar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 64))
             bar.autoresizingMask = [.flexibleWidth]
@@ -243,6 +249,12 @@ open class FilePreviewController: QLPreviewController {
             bar.pushItem(item, animated: true)
             customNavigationBar = bar
         }
+
+        
+    }
+    
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     deinit {
