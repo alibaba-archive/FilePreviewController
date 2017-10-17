@@ -19,11 +19,6 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
         print("filePathComponent: \(FilePreviewControllerConstants.filePathComponent)")
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     @IBAction func buttonTap(_ sender: UIButton) {
         let item1 = FPActionBarItem(title: "ONE", style: .plain) { (controller, _) in
             let viewController = UIViewController()
@@ -43,8 +38,8 @@ class ViewController: UIViewController, QLPreviewControllerDataSource, FilePrevi
 //        let url = NSURL(string: jpg)
 //        let item = FilePreviewItem(previewItemURL: url!, previewItemTitle: "Good Good File/Good File.jpg", fileExtension: "jpg")
         
-        let mp3 = URL(string: "https://www.teambition.com/api/works/5934c20b9e97a55baf4f461e/download/RxSwift_v1.0.pdf?signature=eyJhbGciOiJIUzI1NiJ9.eyJfd29ya0lkIjoiNTkzNGMyMGI5ZTk3YTU1YmFmNGY0NjFlIiwiZmlsZUtleSI6IjEzMHRiN2QzZDZmMjg3YWU3ZWYxZDQwZWVjMmY2ODE3NWQ4OSIsIl91c2VySWQiOiI1NDI1NDJmZjg4MmE2YzcwMGJiOTMwNmIiLCJleHAiOjE1MDI4NTk1MDUsInN0b3JhZ2UiOiJzdHJpa2VyLWh6In0.jJO1R3IsPFXmmBKQTVrXakhm8_7qu0ZJpeQCM8qEdRI")
-        let item = FilePreviewItem(previewItemURL: mp3!, previewItemTitle: "RxSwift_v1.0.pdf", fileExtension: "pdf", fileKey: "130tb7d3d6f287ae7ef1d40eec2f68175d89")
+        let mp3 = URL(string: "https://devstreaming-cdn.apple.com/videos/wwdc/2017/102xyar2647hak3e/102/102_platforms_state_of_the_union.pdf")
+        let item = FilePreviewItem(previewItemURL: mp3!, previewItemTitle: "Platforms State of the Union.pdf", fileExtension: "pdf", fileKey: "130tb7d3d6f287ae7ef1d40eec2f68175d89")
         // Show SingleFilePreviewController, you can also push it into navigation controller
         let singleFilePreviewController = SingleFilePreviewController(previewItem: item)
         singleFilePreviewController.isEnableShare = true

@@ -229,6 +229,9 @@ open class FilePreviewController: QLPreviewController {
 
         if let navigationBar = navigationBar, let container = navigationBar.superview {
             let bar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 64))
+            if #available(iOS 11.0, *) {
+                bar.frame.origin.y = 20
+            }
             bar.autoresizingMask = [.flexibleWidth]
             container.addSubview(bar)
             let item = UINavigationItem(title: navigationItem.title ?? "")
@@ -290,7 +293,11 @@ open class FilePreviewController: QLPreviewController {
                         isFullScreen = false
                         UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
-                            self.customNavigationBar?.frame.origin.y = 0
+                            if #available(iOS 11.0, *) {
+                                self.customNavigationBar?.frame.origin.y = 20
+                            } else {
+                                self.customNavigationBar?.frame.origin.y = 0
+                            }
                             self.navigationBar?.superview?.layoutIfNeeded()
                             self.originalToolbar?.isHidden = true
                             self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
@@ -309,7 +316,7 @@ open class FilePreviewController: QLPreviewController {
         return isFullScreen
     }
     
-    func dismissSelf() {
+    @objc func dismissSelf() {
         presentingViewController?.dismissFilePreviewController()
     }
 
@@ -329,7 +336,7 @@ open class FilePreviewController: QLPreviewController {
 
 // MARK: - Share
 public extension FilePreviewController {
-    func showMoreActivity() {
+    @objc func showMoreActivity() {
         guard let previewItem = currentPreviewItem as? FilePreviewItem else {
             return
         }
@@ -338,7 +345,7 @@ public extension FilePreviewController {
         }
     }
 
-    func showShareActivity() {
+    @objc func showShareActivity() {
         guard let previewItem = currentPreviewItem as? FilePreviewItem else {
             return
         }

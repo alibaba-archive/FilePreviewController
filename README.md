@@ -21,7 +21,7 @@ If Alamofire is not used in your project, you have to **drag it your self into y
 ## Run Demo
 
 ``` bash
-$ git clone git@github.com:teambition/FilePreviewController.git
+$ git clone https://github.com/teambition/FilePreviewController.git
 ```
 And then
 

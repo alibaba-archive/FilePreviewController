@@ -35,7 +35,7 @@ open class FPActionBarItem: NSObject {
         self.action = action
     }
     
-    func triggerAction() {
+    @objc func triggerAction() {
         guard let filePreviewController = filePreviewController, let action = action else {
             return
         }

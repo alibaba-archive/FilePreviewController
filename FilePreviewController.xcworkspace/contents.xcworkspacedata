@@ -2,9 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:Demo.xcodeproj">
+      location = "group:FilePreviewController.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:FilePreviewController.xcodeproj">
+      location = "group:Demo.xcodeproj">
    </FileRef>
 </Workspace>
