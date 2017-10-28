@@ -230,7 +230,7 @@ open class FilePreviewController: QLPreviewController {
         if let navigationBar = navigationBar, let container = navigationBar.superview {
             let bar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 64))
             if #available(iOS 11.0, *) {
-                bar.frame.origin.y = 20
+                bar.frame = CGRect(x: 0, y: 20, width: view.frame.width, height: 44)
             }
             bar.autoresizingMask = [.flexibleWidth]
             container.addSubview(bar)
