@@ -230,7 +230,7 @@ open class FilePreviewController: QLPreviewController {
         if let navigationBar = navigationBar, let container = navigationBar.superview {
             let bar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 64))
             if #available(iOS 11.0, *) {
-                bar.frame = CGRect(x: 0, y: 20, width: view.frame.width, height: 44)
+                bar.frame.origin.y = 20
             }
             bar.autoresizingMask = [.flexibleWidth]
             container.addSubview(bar)
@@ -452,6 +452,9 @@ extension FilePreviewController {
         let navigationBarWidth = navigationBar.frame.width
         let progressBarHeight = progressBar.frame.height
         progressBar.frame = CGRect(x: 0, y: navigationBarHeight - progressBarHeight, width: navigationBarWidth, height: progressBarHeight)
+        if #available(iOS 11.0, *) {
+           progressBar.frame.origin.y = navigationBarHeight - progressBarHeight - 20
+        }
     }
     
     func layoutToolbar() {
