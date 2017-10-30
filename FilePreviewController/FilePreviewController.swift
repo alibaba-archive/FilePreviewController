@@ -177,7 +177,7 @@ open class FilePreviewController: QLPreviewController {
         bar?.tintColor = UIColor.white
         return bar
     }()
-    var customNavigationBar: UINavigationBar?
+    var customNavigationBar: UIView?
     lazy var leftBarButtonItem: UIBarButtonItem = {
         let crossImage = UIImage(named: "icon-cross", in: Bundle.init(for: FilePreviewController.self), compatibleWith: nil)
         return UIBarButtonItem(image: crossImage, style: .plain, target: self, action: #selector(dismissSelf))
@@ -228,12 +228,20 @@ open class FilePreviewController: QLPreviewController {
         navigationController?.navigationBar.barStyle = .default
 
         if let navigationBar = navigationBar, let container = navigationBar.superview {
-            let bar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 64))
-            if #available(iOS 11.0, *) {
-                bar.frame.origin.y = 20
-            }
-            bar.autoresizingMask = [.flexibleWidth]
-            container.addSubview(bar)
+            let navigationBarView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 64))
+            navigationBarView.backgroundColor = UIColor.white
+            navigationBarView.autoresizingMask = [.flexibleWidth]
+            container.addSubview(navigationBarView)
+            
+            let bar = UINavigationBar(frame: CGRect(x: 0, y: 20, width: view.frame.width, height: 44))
+            bar.isTranslucent = false
+            bar.translatesAutoresizingMaskIntoConstraints = false
+            navigationBarView.addSubview(bar)
+            let leftConstriant = NSLayoutConstraint(item: bar, attribute: .left, relatedBy: .equal, toItem: navigationBarView, attribute: .left, multiplier: 1.0, constant: 0)
+            let rightConstriant = NSLayoutConstraint(item: bar, attribute: .right, relatedBy: .equal, toItem: navigationBarView, attribute: .right, multiplier: 1.0, constant: 0)
+            let bottomConstriant = NSLayoutConstraint(item: bar, attribute: .bottom, relatedBy: .equal, toItem: navigationBarView, attribute: .bottom, multiplier: 1.0, constant: 0)
+            NSLayoutConstraint.activate([leftConstriant, rightConstriant, bottomConstriant])
+            
             let item = UINavigationItem(title: navigationItem.title ?? "")
             item.leftBarButtonItem = leftBarButtonItem
             var barButtonItems: [UIBarButtonItem] = []
@@ -250,7 +258,7 @@ open class FilePreviewController: QLPreviewController {
             }
             item.hidesBackButton = true
             bar.pushItem(item, animated: true)
-            customNavigationBar = bar
+            customNavigationBar = navigationBarView
         }
 
         
@@ -293,11 +301,7 @@ open class FilePreviewController: QLPreviewController {
                         isFullScreen = false
                         UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
-                            if #available(iOS 11.0, *) {
-                                self.customNavigationBar?.frame.origin.y = 20
-                            } else {
-                                self.customNavigationBar?.frame.origin.y = 0
-                            }
+                            self.customNavigationBar?.frame.origin.y = 0
                             self.navigationBar?.superview?.layoutIfNeeded()
                             self.originalToolbar?.isHidden = true
                             self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
@@ -452,9 +456,6 @@ extension FilePreviewController {
         let navigationBarWidth = navigationBar.frame.width
         let progressBarHeight = progressBar.frame.height
         progressBar.frame = CGRect(x: 0, y: navigationBarHeight - progressBarHeight, width: navigationBarWidth, height: progressBarHeight)
-        if #available(iOS 11.0, *) {
-           progressBar.frame.origin.y = navigationBarHeight - progressBarHeight - 20
-        }
     }
     
     func layoutToolbar() {
