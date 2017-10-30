@@ -228,18 +228,25 @@ open class FilePreviewController: QLPreviewController {
         navigationController?.navigationBar.barStyle = .default
 
         if let navigationBar = navigationBar, let container = navigationBar.superview {
-            let navigationBarView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 64))
-            navigationBarView.backgroundColor = UIColor.white
-            navigationBarView.autoresizingMask = [.flexibleWidth]
-            container.addSubview(navigationBarView)
+            let customHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: view.frame.width, height: 64))
+            customHeaderView.backgroundColor = UIColor.white
+            customHeaderView.translatesAutoresizingMaskIntoConstraints = false
+            container.addSubview(customHeaderView)
             
-            let bar = UINavigationBar(frame: CGRect(x: 0, y: 20, width: view.frame.width, height: 44))
+            let headerLeftConstriant = NSLayoutConstraint(item: customHeaderView, attribute: .left, relatedBy: .equal, toItem: container, attribute: .left, multiplier: 1.0, constant: 0)
+            let headerRightConstriant = NSLayoutConstraint(item: customHeaderView, attribute: .right, relatedBy: .equal, toItem: container, attribute: .right, multiplier: 1.0, constant: 0)
+            let headerTopConstriant = NSLayoutConstraint(item: customHeaderView, attribute: .top, relatedBy: .equal, toItem: container, attribute: .top, multiplier: 1.0, constant: 0)
+            let headerBottomConstriant = NSLayoutConstraint(item: customHeaderView, attribute: .bottom, relatedBy: .equal, toItem: navigationBar, attribute: .bottom, multiplier: 1.0, constant: 0)
+            NSLayoutConstraint.activate([headerLeftConstriant, headerRightConstriant, headerTopConstriant, headerBottomConstriant])
+            
+            let bar = UINavigationBar(frame: CGRect.zero)
             bar.isTranslucent = false
             bar.translatesAutoresizingMaskIntoConstraints = false
-            navigationBarView.addSubview(bar)
-            let leftConstriant = NSLayoutConstraint(item: bar, attribute: .left, relatedBy: .equal, toItem: navigationBarView, attribute: .left, multiplier: 1.0, constant: 0)
-            let rightConstriant = NSLayoutConstraint(item: bar, attribute: .right, relatedBy: .equal, toItem: navigationBarView, attribute: .right, multiplier: 1.0, constant: 0)
-            let bottomConstriant = NSLayoutConstraint(item: bar, attribute: .bottom, relatedBy: .equal, toItem: navigationBarView, attribute: .bottom, multiplier: 1.0, constant: 0)
+            customHeaderView.addSubview(bar)
+            
+            let leftConstriant = NSLayoutConstraint(item: bar, attribute: .left, relatedBy: .equal, toItem: customHeaderView, attribute: .left, multiplier: 1.0, constant: 0)
+            let rightConstriant = NSLayoutConstraint(item: bar, attribute: .right, relatedBy: .equal, toItem: customHeaderView, attribute: .right, multiplier: 1.0, constant: 0)
+            let bottomConstriant = NSLayoutConstraint(item: bar, attribute: .bottom, relatedBy: .equal, toItem: customHeaderView, attribute: .bottom, multiplier: 1.0, constant: 0)
             NSLayoutConstraint.activate([leftConstriant, rightConstriant, bottomConstriant])
             
             let item = UINavigationItem(title: navigationItem.title ?? "")
@@ -258,7 +265,7 @@ open class FilePreviewController: QLPreviewController {
             }
             item.hidesBackButton = true
             bar.pushItem(item, animated: true)
-            customNavigationBar = navigationBarView
+            customNavigationBar = customHeaderView
         }
 
         
@@ -290,7 +297,7 @@ open class FilePreviewController: QLPreviewController {
                         isFullScreen = true
                         UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
-                            self.customNavigationBar?.frame.origin.y = -64
+                            //self.customNavigationBar?.frame.origin.y = -64
                             self.navigationBar?.superview?.layoutIfNeeded()
                             }, completion: { (_) in
                                 self.originalToolbar?.isHidden = true
@@ -299,9 +306,13 @@ open class FilePreviewController: QLPreviewController {
                     } else if isFullScreen && point.y > 0 {
                         toolbarBottomConstraint?.constant = shouldDisplayToolbar ? 0 : -45
                         isFullScreen = false
+                        
+                        let headerBottomConstriant = NSLayoutConstraint(item: self.customNavigationBar!, attribute: .bottom, relatedBy: .equal, toItem: object, attribute: .bottom, multiplier: 1.0, constant: 0)
+                        headerBottomConstriant.isActive = true
+                        
                         UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
-                            self.customNavigationBar?.frame.origin.y = 0
+                            //self.customNavigationBar?.frame.origin.y = 0
                             self.navigationBar?.superview?.layoutIfNeeded()
                             self.originalToolbar?.isHidden = true
                             self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
@@ -467,7 +478,11 @@ extension FilePreviewController {
                 toolbar.translatesAutoresizingMaskIntoConstraints = false
                 view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[toolbar]-0-|", options: [], metrics: nil , views: ["toolbar":toolbar]))
                 toolbar.addConstraint(NSLayoutConstraint(item: toolbar, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 44))
-                toolbarBottomConstraint = NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: toolbar, attribute: .bottom, multiplier: 1.0, constant: 0)
+                if #available(iOS 11.0, *) {
+                    toolbarBottomConstraint = NSLayoutConstraint(item: view.safeAreaLayoutGuide, attribute: .bottom, relatedBy: .equal, toItem: toolbar, attribute: .bottom, multiplier: 1.0, constant: 0)
+                } else {
+                    toolbarBottomConstraint = NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: toolbar, attribute: .bottom, multiplier: 1.0, constant: 0)
+                }
                 view.addConstraint(toolbarBottomConstraint!)
             }
 
