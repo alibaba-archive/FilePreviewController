@@ -83,7 +83,7 @@ public func localFilePathFor(_ URL: Foundation.URL, fileName: String? = nil, fil
         }
     }
     let lastPathComponent = saveName ?? url.lastPathComponent
-    if lastPathComponent.characters.count > 0 {
+    if lastPathComponent.count > 0 {
         // add extra directory to keep original file name when share
         cacheDirectory = cacheDirectory.stringByAppendingPathComponent(lastPathComponent)
     }
@@ -204,6 +204,13 @@ open class FilePreviewController: QLPreviewController {
     var toolbar: UIToolbar?
     
     var toolbarBottomConstraint: NSLayoutConstraint?
+    private var toolbarBackgroundHeight: CGFloat {
+        if #available(iOS 11.0, *) {
+            return 44 + view.safeAreaInsets.bottom
+        } else {
+            return 44
+        }
+    }
     
     open weak var controllerDelegate: FilePreviewControllerDelegate?
     
@@ -267,8 +274,6 @@ open class FilePreviewController: QLPreviewController {
             bar.pushItem(item, animated: true)
             customNavigationBar = customHeaderView
         }
-
-        
     }
     
     open override func viewDidAppear(_ animated: Bool) {
@@ -293,7 +298,7 @@ open class FilePreviewController: QLPreviewController {
                 if let new = change[NSKeyValueChangeKey.newKey] as? NSValue {
                     let point = new.cgPointValue
                     if !isFullScreen && point.y < 0 {
-                        toolbarBottomConstraint?.constant = -44
+                        toolbarBottomConstraint?.constant = -toolbarBackgroundHeight
                         isFullScreen = true
                         UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
@@ -304,7 +309,7 @@ open class FilePreviewController: QLPreviewController {
                                 self.navigationBar?.superview?.sendSubview(toBack: self.navigationBar!)
                         })
                     } else if isFullScreen && point.y > 0 {
-                        toolbarBottomConstraint?.constant = shouldDisplayToolbar ? 0 : -45
+                        toolbarBottomConstraint?.constant = shouldDisplayToolbar ? 0 : -toolbarBackgroundHeight
                         isFullScreen = false
                         
                         let headerBottomConstriant = NSLayoutConstraint(item: self.customNavigationBar!, attribute: .bottom, relatedBy: .equal, toItem: object, attribute: .bottom, multiplier: 1.0, constant: 0)
@@ -487,7 +492,7 @@ extension FilePreviewController {
             }
 
             guard let toolbar = toolbar, let items = items , items.count > 0 else {
-                toolbarBottomConstraint?.constant = -44
+                toolbarBottomConstraint?.constant = -toolbarBackgroundHeight
                 return
             }
             let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
