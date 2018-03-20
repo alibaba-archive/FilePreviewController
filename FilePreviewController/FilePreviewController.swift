@@ -204,11 +204,14 @@ open class FilePreviewController: QLPreviewController {
     var toolbar: UIToolbar?
     
     var toolbarBottomConstraint: NSLayoutConstraint?
+    
+    private let customToolbarHeight: CGFloat = 44
     private var toolbarBackgroundHeight: CGFloat {
         if #available(iOS 11.0, *) {
-            return 44 + view.safeAreaInsets.bottom
+            let bottomPadding = UIApplication.shared.keyWindow?.safeAreaInsets.bottom ?? 0
+            return customToolbarHeight + bottomPadding
         } else {
-            return 44
+            return customToolbarHeight
         }
     }
     
@@ -225,7 +228,7 @@ open class FilePreviewController: QLPreviewController {
     override open func viewDidLayoutSubviews() {
         layoutToolbar()
     }
-
+    
     open override var preferredStatusBarStyle : UIStatusBarStyle {
         return .default
     }
@@ -297,9 +300,10 @@ open class FilePreviewController: QLPreviewController {
             if let change = change {
                 if let new = change[NSKeyValueChangeKey.newKey] as? NSValue {
                     let point = new.cgPointValue
-                    if !isFullScreen && point.y < 0 {
-                        toolbarBottomConstraint?.constant = -toolbarBackgroundHeight
-                        isFullScreen = true
+                    if !self.isFullScreen && point.y < 0 {
+                        self.toolbarBottomConstraint?.constant = 0
+                        self.isFullScreen = true
+                        self.originalToolbar?.isHidden = true
                         UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
                             //self.customNavigationBar?.frame.origin.y = -64
@@ -308,26 +312,29 @@ open class FilePreviewController: QLPreviewController {
                                 self.originalToolbar?.isHidden = true
                                 self.navigationBar?.superview?.sendSubview(toBack: self.navigationBar!)
                         })
-                    } else if isFullScreen && point.y > 0 {
-                        toolbarBottomConstraint?.constant = shouldDisplayToolbar ? 0 : -toolbarBackgroundHeight
-                        isFullScreen = false
+                    } else if self.isFullScreen && point.y > 0 {
+                        self.toolbarBottomConstraint?.constant = self.shouldDisplayToolbar ? self.toolbarBackgroundHeight : 0
+                        self.isFullScreen = false
                         
-                        if self.navigationBar?.superview == self.customNavigationBar?.superview {
-                            let headerBottomConstriant = NSLayoutConstraint(item: self.customNavigationBar!, attribute: .bottom, relatedBy: .equal, toItem: self.navigationBar!, attribute: .bottom, multiplier: 1.0, constant: 0)
+                        if object.superview == self.customNavigationBar?.superview {
+                            let headerBottomConstriant = NSLayoutConstraint(item: self.customNavigationBar!, attribute: .bottom, relatedBy: .equal, toItem: object, attribute: .bottom, multiplier: 1.0, constant: 0)
                             headerBottomConstriant.isActive = true
                         }
                         
-                        self.navigationBar?.alpha = 0
-                        self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
+                        DispatchQueue.main.async {
+                            self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
+                        }
                         UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
                             //self.customNavigationBar?.frame.origin.y = 0
                             self.navigationBar?.superview?.layoutIfNeeded()
                             self.originalToolbar?.isHidden = true
-                            }, completion: { (_) in
+                            self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
+                        }, completion: { (_) in
+                            self.originalToolbar?.isHidden = true
+                            DispatchQueue.main.async {
                                 self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
-                                self.originalToolbar?.isHidden = true
-                                self.navigationBar?.alpha = 1.0
+                            }
                         })
                     }
                     setNeedsStatusBarAppearanceUpdate()
@@ -486,17 +493,13 @@ extension FilePreviewController {
                 view.addSubview(toolbar)
                 toolbar.translatesAutoresizingMaskIntoConstraints = false
                 view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[toolbar]-0-|", options: [], metrics: nil , views: ["toolbar":toolbar]))
-                toolbar.addConstraint(NSLayoutConstraint(item: toolbar, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: 44))
-                if #available(iOS 11.0, *) {
-                    toolbarBottomConstraint = NSLayoutConstraint(item: view.safeAreaLayoutGuide, attribute: .bottom, relatedBy: .equal, toItem: toolbar, attribute: .bottom, multiplier: 1.0, constant: 0)
-                } else {
-                    toolbarBottomConstraint = NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: toolbar, attribute: .bottom, multiplier: 1.0, constant: 0)
-                }
+                toolbar.addConstraint(NSLayoutConstraint(item: toolbar, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: customToolbarHeight))
+                toolbarBottomConstraint = NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: toolbar, attribute: .top, multiplier: 1.0, constant: toolbarBackgroundHeight)
                 view.addConstraint(toolbarBottomConstraint!)
             }
-
+            
             guard let toolbar = toolbar, let items = items , items.count > 0 else {
-                toolbarBottomConstraint?.constant = -toolbarBackgroundHeight
+                toolbarBottomConstraint?.constant = 0
                 return
             }
             let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)

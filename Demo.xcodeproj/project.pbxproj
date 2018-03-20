@@ -13,6 +13,7 @@
 		4A6BC7931C76F8C500DACDA5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4A6BC7921C76F8C500DACDA5 /* Assets.xcassets */; };
 		4A6BC7961C76F8C500DACDA5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A6BC7941C76F8C500DACDA5 /* LaunchScreen.storyboard */; };
 		4A725BBA1C7D947800244964 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A725BB91C7D947800244964 /* Alamofire.framework */; };
+		AC44068C20622B550066C475 /* UINavigationBar+Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC44068B20622B550066C475 /* UINavigationBar+Appearance.swift */; };
 		D3C8E6381F96181300205E62 /* FilePreviewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3C8E6371F96181300205E62 /* FilePreviewController.framework */; };
 		D3C8E6391F96181300205E62 /* FilePreviewController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D3C8E6371F96181300205E62 /* FilePreviewController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
@@ -40,6 +41,7 @@
 		4A6BC7951C76F8C500DACDA5 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4A6BC7971C76F8C500DACDA5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A725BB91C7D947800244964 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		AC44068B20622B550066C475 /* UINavigationBar+Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+Appearance.swift"; sourceTree = "<group>"; };
 		D3C8E6371F96181300205E62 /* FilePreviewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FilePreviewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -79,6 +81,7 @@
 			children = (
 				4A6BC78B1C76F8C500DACDA5 /* AppDelegate.swift */,
 				4A6BC78D1C76F8C500DACDA5 /* ViewController.swift */,
+				AC44068B20622B550066C475 /* UINavigationBar+Appearance.swift */,
 				4A6BC78F1C76F8C500DACDA5 /* Main.storyboard */,
 				4A6BC7941C76F8C500DACDA5 /* LaunchScreen.storyboard */,
 				4A6BC7971C76F8C500DACDA5 /* Info.plist */,
@@ -179,6 +182,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC44068C20622B550066C475 /* UINavigationBar+Appearance.swift in Sources */,
 				4A6BC78E1C76F8C500DACDA5 /* ViewController.swift in Sources */,
 				4A6BC78C1C76F8C500DACDA5 /* AppDelegate.swift in Sources */,
 			);
