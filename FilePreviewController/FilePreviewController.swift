@@ -51,7 +51,7 @@ public extension String {
 
 public func localFilePathFor(_ URL: Foundation.URL, fileName: String? = nil, fileExtension: String? = nil, fileKey: String?) -> String? {
     var url = URL
-    if let fileExtension = fileExtension, url.pathExtension.characters.count == 0 {
+    if let fileExtension = fileExtension, url.pathExtension.count == 0 {
         url = url.appendingPathExtension(fileExtension)
     }
     var saveName: String?
@@ -312,18 +312,22 @@ open class FilePreviewController: QLPreviewController {
                         toolbarBottomConstraint?.constant = shouldDisplayToolbar ? 0 : -toolbarBackgroundHeight
                         isFullScreen = false
                         
-                        let headerBottomConstriant = NSLayoutConstraint(item: self.customNavigationBar!, attribute: .bottom, relatedBy: .equal, toItem: object, attribute: .bottom, multiplier: 1.0, constant: 0)
-                        headerBottomConstriant.isActive = true
+                        if self.navigationBar?.superview == self.customNavigationBar?.superview {
+                            let headerBottomConstriant = NSLayoutConstraint(item: self.customNavigationBar!, attribute: .bottom, relatedBy: .equal, toItem: self.navigationBar!, attribute: .bottom, multiplier: 1.0, constant: 0)
+                            headerBottomConstriant.isActive = true
+                        }
                         
+                        self.navigationBar?.alpha = 0
+                        self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
                         UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
                             //self.customNavigationBar?.frame.origin.y = 0
                             self.navigationBar?.superview?.layoutIfNeeded()
                             self.originalToolbar?.isHidden = true
-                            self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
                             }, completion: { (_) in
                                 self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
                                 self.originalToolbar?.isHidden = true
+                                self.navigationBar?.alpha = 1.0
                         })
                     }
                     setNeedsStatusBarAppearanceUpdate()
