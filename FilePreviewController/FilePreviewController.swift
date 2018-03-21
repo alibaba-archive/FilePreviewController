@@ -306,7 +306,6 @@ open class FilePreviewController: QLPreviewController {
                         self.originalToolbar?.isHidden = true
                         UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
-                            //self.customNavigationBar?.frame.origin.y = -64
                             self.navigationBar?.superview?.layoutIfNeeded()
                             }, completion: { (_) in
                                 self.originalToolbar?.isHidden = true
@@ -326,7 +325,6 @@ open class FilePreviewController: QLPreviewController {
                         }
                         UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
-                            //self.customNavigationBar?.frame.origin.y = 0
                             self.navigationBar?.superview?.layoutIfNeeded()
                             self.originalToolbar?.isHidden = true
                             self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
