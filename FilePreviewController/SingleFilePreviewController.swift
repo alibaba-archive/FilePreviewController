@@ -9,31 +9,32 @@
 import Foundation
 import QuickLook
 
+public protocol PreviewItemHandler {
+    func previewItemHandler(_ handle: QLPreviewItem) -> QLPreviewItem
+}
+
 open class SingleFilePreviewController: FilePreviewController {
-    var singleItemDataSource: SingleItemDataSource!
- 
-    public init(previewItem: FilePreviewItem) {
+    let singleItemDataSource: QLPreviewControllerDataSource
+    
+    public init(previewItem: FilePreviewItem, previewItemHandler: PreviewItemHandler? = nil) {
+        singleItemDataSource = SingleItemDataSource(previewItem: previewItem, handler: previewItemHandler)
         super.init(nibName: nil, bundle: nil)
-        singleItemDataSource = SingleItemDataSource(previewItem: previewItem)
-        originalDataSource = singleItemDataSource
+        self.originalDataSource = singleItemDataSource
         dataSource = self
     }
-
+    
     required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    open override func viewDidLoad() {
-        super.viewDidLoad()
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
-class SingleItemDataSource: NSObject, QLPreviewControllerDataSource {
-    var previewItem: QLPreviewItem!
-
-    init(previewItem: QLPreviewItem) {
-        super.init()
+class SingleItemDataSource: QLPreviewControllerDataSource {
+    let previewItem: QLPreviewItem
+    let handler: PreviewItemHandler?
+    
+    init(previewItem: QLPreviewItem, handler: PreviewItemHandler?) {
         self.previewItem = previewItem
+        self.handler = handler
     }
 
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
@@ -41,6 +42,9 @@ class SingleItemDataSource: NSObject, QLPreviewControllerDataSource {
     }
 
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-        return previewItem!
+        guard let handler = handler else {
+            return previewItem
+        }
+        return handler.previewItemHandler(previewItem)
     }
 }
