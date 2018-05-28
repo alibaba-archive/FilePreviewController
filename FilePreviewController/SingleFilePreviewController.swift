@@ -10,7 +10,7 @@ import Foundation
 import QuickLook
 
 public protocol PreviewItemHandler {
-    func previewItemHandler(_ handle: QLPreviewItem) -> QLPreviewItem
+    func previewItemHandler(_ item: QLPreviewItem) -> QLPreviewItem
 }
 
 open class SingleFilePreviewController: FilePreviewController {
