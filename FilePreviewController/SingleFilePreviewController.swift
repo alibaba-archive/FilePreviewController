@@ -12,7 +12,7 @@ import QuickLook
 open class SingleFilePreviewController: FilePreviewController {
     var singleItemDataSource: SingleItemDataSource!
  
-    public init(previewItem: FilePreviewItem) {
+    public init(previewItem: FilePreviewItem?) {
         super.init(nibName: nil, bundle: nil)
         singleItemDataSource = SingleItemDataSource(previewItem: previewItem)
         originalDataSource = singleItemDataSource
@@ -26,18 +26,23 @@ open class SingleFilePreviewController: FilePreviewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
     }
+    
+    public func updateItem(_ previewItem: FilePreviewItem?) {
+        singleItemDataSource.previewItem = previewItem
+        reloadData()
+    }
 }
 
 class SingleItemDataSource: NSObject, QLPreviewControllerDataSource {
-    var previewItem: QLPreviewItem!
+    var previewItem: QLPreviewItem?
 
-    init(previewItem: QLPreviewItem) {
+    init(previewItem: QLPreviewItem?) {
         super.init()
         self.previewItem = previewItem
     }
 
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-        return 1
+        return (previewItem != nil) ? 1 : 0
     }
 
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
