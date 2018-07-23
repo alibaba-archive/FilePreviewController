@@ -305,7 +305,6 @@ open class FilePreviewController: QLPreviewController {
                     } else if self.isFullScreen && point.y > 0 {
                         self.enterFullScreen(false)
                     }
-                    setNeedsStatusBarAppearanceUpdate()
                 }
             }
         }
@@ -316,6 +315,7 @@ open class FilePreviewController: QLPreviewController {
             self.toolbarBottomConstraint?.constant = 0
             self.isFullScreen = true
             self.originalToolbar?.isHidden = true
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
             UIView.animate(withDuration: 0.2, animations: {
                 self.view.layoutIfNeeded()
                 self.navigationBar?.superview?.layoutIfNeeded()
@@ -347,6 +347,7 @@ open class FilePreviewController: QLPreviewController {
                 }
             })
         }
+        setNeedsStatusBarAppearanceUpdate()
     }
 
     override open var prefersStatusBarHidden : Bool {
