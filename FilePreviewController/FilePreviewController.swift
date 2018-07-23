@@ -301,43 +301,51 @@ open class FilePreviewController: QLPreviewController {
                 if let new = change[NSKeyValueChangeKey.newKey] as? NSValue {
                     let point = new.cgPointValue
                     if !self.isFullScreen && point.y < 0 {
-                        self.toolbarBottomConstraint?.constant = 0
-                        self.isFullScreen = true
-                        self.originalToolbar?.isHidden = true
-                        UIView.animate(withDuration: 0.2, animations: {
-                            self.view.layoutIfNeeded()
-                            self.navigationBar?.superview?.layoutIfNeeded()
-                            }, completion: { (_) in
-                                self.originalToolbar?.isHidden = true
-                                self.navigationBar?.superview?.sendSubview(toBack: self.navigationBar!)
-                        })
+                        self.enterFullScreen(true)
                     } else if self.isFullScreen && point.y > 0 {
-                        self.toolbarBottomConstraint?.constant = self.shouldDisplayToolbar ? self.toolbarBackgroundHeight : 0
-                        self.isFullScreen = false
-                        
-                        if object.superview == self.customNavigationBar?.superview {
-                            let headerBottomConstriant = NSLayoutConstraint(item: self.customNavigationBar!, attribute: .bottom, relatedBy: .equal, toItem: object, attribute: .bottom, multiplier: 1.0, constant: 0)
-                            headerBottomConstriant.isActive = true
-                        }
-                        
-                        DispatchQueue.main.async {
-                            self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
-                        }
-                        UIView.animate(withDuration: 0.2, animations: {
-                            self.view.layoutIfNeeded()
-                            self.navigationBar?.superview?.layoutIfNeeded()
-                            self.originalToolbar?.isHidden = true
-                            self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
-                        }, completion: { (_) in
-                            self.originalToolbar?.isHidden = true
-                            DispatchQueue.main.async {
-                                self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
-                            }
-                        })
+                        self.enterFullScreen(false)
                     }
                     setNeedsStatusBarAppearanceUpdate()
                 }
             }
+        }
+    }
+    
+    open func enterFullScreen(_ flag: Bool) {
+        if !self.isFullScreen && flag {
+            self.toolbarBottomConstraint?.constant = 0
+            self.isFullScreen = true
+            self.originalToolbar?.isHidden = true
+            UIView.animate(withDuration: 0.2, animations: {
+                self.view.layoutIfNeeded()
+                self.navigationBar?.superview?.layoutIfNeeded()
+            }, completion: { (_) in
+                self.originalToolbar?.isHidden = true
+                self.navigationBar?.superview?.sendSubview(toBack: self.navigationBar!)
+            })
+        } else if self.isFullScreen && !flag {
+            self.toolbarBottomConstraint?.constant = self.shouldDisplayToolbar ? self.toolbarBackgroundHeight : 0
+            self.isFullScreen = false
+            let object = self.navigationBar!
+            if object.superview == self.customNavigationBar?.superview {
+                let headerBottomConstriant = NSLayoutConstraint(item: self.customNavigationBar!, attribute: .bottom, relatedBy: .equal, toItem: object, attribute: .bottom, multiplier: 1.0, constant: 0)
+                headerBottomConstriant.isActive = true
+            }
+            
+            DispatchQueue.main.async {
+                self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
+            }
+            UIView.animate(withDuration: 0.2, animations: {
+                self.view.layoutIfNeeded()
+                self.navigationBar?.superview?.layoutIfNeeded()
+                self.originalToolbar?.isHidden = true
+                self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
+            }, completion: { (_) in
+                self.originalToolbar?.isHidden = true
+                DispatchQueue.main.async {
+                    self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
+                }
+            })
         }
     }
 
