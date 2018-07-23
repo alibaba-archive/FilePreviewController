@@ -297,11 +297,13 @@ open class FilePreviewController: QLPreviewController {
     
     override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &myContext, let keyPath = keyPath , keyPath == "center", let object = object as? UINavigationBar , object == navigationBar {
-            if change != nil {
-                if !self.isFullScreen {
-                    self.enterFullScreen(true)
-                } else if self.isFullScreen {
-                    self.enterFullScreen(false)
+            if let change = change {
+                if let new = change[NSKeyValueChangeKey.newKey] as? NSValue {
+                    if !self.isFullScreen {
+                        self.enterFullScreen(true)
+                    } else if self.isFullScreen {
+                        self.enterFullScreen(false)
+                    }
                 }
             }
         }
