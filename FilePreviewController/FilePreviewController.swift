@@ -550,7 +550,16 @@ extension FilePreviewController {
         super.viewWillTransition(to: size, with: coordinator)
         coordinator.animate(alongsideTransition: { (_) -> Void in
             self.layoutProgressBar()
-            }, completion: nil)
+            }, completion: { _ in
+                guard UIDevice.current.userInterfaceIdiom == .phone else {
+                    return
+                }
+                if UIInterfaceOrientationIsLandscape(UIApplication.shared.statusBarOrientation) {
+                    self.enterFullScreen(true)
+                } else {
+                    self.enterFullScreen(false)
+                }
+        })
     }
 }
 
