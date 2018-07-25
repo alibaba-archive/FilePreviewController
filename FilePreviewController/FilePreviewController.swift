@@ -540,9 +540,11 @@ extension FilePreviewController {
     
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        
-        refreshCurrentPreviewItem()
-        navigationController?.setNavigationBarHidden(true, animated: true)
+        coordinator.animate(alongsideTransition: { (_) -> Void in
+            self.layoutProgressBar()
+            self.refreshCurrentPreviewItem()
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+        }, completion: nil)
     }
 }
 
