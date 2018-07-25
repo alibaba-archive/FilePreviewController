@@ -226,6 +226,7 @@ open class FilePreviewController: QLPreviewController {
     }
     
     override open func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         layoutToolbar()
     }
     
@@ -539,9 +540,9 @@ extension FilePreviewController {
     
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: { (_) -> Void in
-            self.layoutProgressBar()
-            }, completion: nil)
+        
+        refreshCurrentPreviewItem()
+        navigationController?.setNavigationBarHidden(true, animated: true)
     }
 }
 

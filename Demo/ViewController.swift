@@ -104,7 +104,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate {
         // Show SingleFilePreviewController, you can also push it into navigation controller
         let singleFilePreviewController = SingleFilePreviewController(previewItem: item)
         singleFilePreviewController.isEnableShare = true
-        //singleFilePreviewController.actionItems = [item1, item2]
+        singleFilePreviewController.actionItems = [item1, item2]
         singleFilePreviewController.controllerDelegate = self
         let navigation = UINavigationController(rootViewController: singleFilePreviewController)
         presentFilePreviewController(viewControllerToPresent: navigation, fromView: cell.imageView)
