@@ -10,6 +10,7 @@ import Foundation
 import QuickLook
 import Alamofire
 import UIKit
+
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
@@ -140,7 +141,7 @@ open class FilePreviewController: QLPreviewController {
         progressView.tintColor = UIColor.blue
         return progressView
     }()
-    fileprivate var shouldDisplayToolbar: Bool {
+    var shouldDisplayToolbar: Bool {
         get {
             return items?.count > 0
         }
@@ -279,11 +280,7 @@ open class FilePreviewController: QLPreviewController {
             customNavigationBar = customHeaderView
         }
     }
-    
-    open override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-    
+
     deinit {
         if let navigationBar = navigationBar {
             navigationBar.removeObserver(self, forKeyPath: "center")
@@ -328,13 +325,13 @@ open class FilePreviewController: QLPreviewController {
                             self.view.layoutIfNeeded()
                             self.navigationBar?.superview?.layoutIfNeeded()
                             self.originalToolbar?.isHidden = true
-                            self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
                         }, completion: { (_) in
                             self.originalToolbar?.isHidden = true
                             DispatchQueue.main.async {
                                 self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
                             }
                         })
+                        
                     }
                     setNeedsStatusBarAppearanceUpdate()
                 }
@@ -350,6 +347,8 @@ open class FilePreviewController: QLPreviewController {
         presentingViewController?.dismissFilePreviewController()
     }
 
+    func willDismiss() {}
+    
     func getNavigationBar(fromView view: UIView) -> UINavigationBar? {
         for v in view.subviews {
             if v is UINavigationBar {
