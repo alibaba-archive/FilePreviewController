@@ -37,7 +37,7 @@ class ViewController: UIViewController {
         
         // mp4
         
-        let mp4 = URL(string: "https://tcs.teambition.net/storage/1013eff73697f68b5e981613debcdcf9673b?download=49DCA8D7-ADD7-487D-83E2-C414D6F9AE23.mp4&Signature=eyJhbGciOiJIUzI1NiJ9.eyJyZXNvdXJjZSI6Ii9zdG9yYWdlLzEwMTNlZmY3MzY5N2Y2OGI1ZTk4MTYxM2RlYmNkY2Y5NjczYiIsImV4cCI6MTUyMTY3NjgwMH0.lqC5zkN-URLa7QxvMpRu78O-4HMvicacIRTVClfnYKI")!
+        let mp4 = URL(string: "http://devimages.apple.com/iphone/samples/bipbop/bipbopall.m3u8")!
         let mp4Item = FilePreviewItem(previewItemURL: mp4, previewItemTitle: "49DCA8D7-ADD7-487D-83E2-C414D6F9AE23.mp4", fileExtension: "mp4", fileKey: "1013eff73697f68b5e981613debcdcf9673b")
         
         // .key
