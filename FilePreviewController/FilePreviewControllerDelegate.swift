@@ -12,6 +12,8 @@ public protocol FilePreviewControllerDelegate: class {
     func previewController(_ controller: FilePreviewController, failedToLoadRemotePreviewItem item:FilePreviewItem, error: NSError)
     func previewController(_ controller: FilePreviewController, willShareItem item: FilePreviewItem)
     func previewController(_ controller: FilePreviewController, showMoreItems item: FilePreviewItem)
+    func previewController(_ controller: FilePreviewController, willDownloadItem item: FilePreviewItem)
+    func previewController(_ controller: FilePreviewController, downloadedItem item: FilePreviewItem, error: Error?)
 }
 
 public extension FilePreviewControllerDelegate {
