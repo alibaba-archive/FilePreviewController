@@ -134,7 +134,15 @@ extension ViewController: FilePreviewControllerDelegate {
     }
     
     func previewController(_ controller: FilePreviewController, showMoreItems item: FilePreviewItem) {
-        print("Custom Share Action")
+        print("Custom show more item")
+    }
+    
+    func previewController(_ controller: FilePreviewController, willDownloadItem item: FilePreviewItem) {
+        print("Start download")
+    }
+    
+    func previewController(_ controller: FilePreviewController, downloadedItem item: FilePreviewItem, error: Error?) {
+        print("Downloaded: \(error.debugDescription)")
     }
 }
 
