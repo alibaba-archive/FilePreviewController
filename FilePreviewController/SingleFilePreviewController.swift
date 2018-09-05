@@ -38,6 +38,8 @@ open class SingleFilePreviewController: FilePreviewController {
     
     var previewItem: FilePreviewItem?
     
+    var assetDuration: CMTime?
+    
     public init(previewItem: FilePreviewItem?) {
         self.previewItem = previewItem
         super.init(nibName: nil, bundle: nil)
@@ -53,10 +55,15 @@ open class SingleFilePreviewController: FilePreviewController {
         }
         self.previewItem = previewItem
         navigationItem.title = previewItem.previewItemTitle
-        let asset = AVAsset(url: url)
+        var asset = AVAsset(url: url)
+        assetDuration = asset.duration
+        if let localAsset = getLocalAsset(withPreviewItem: previewItem), localAsset.duration == asset.duration {
+            asset = localAsset
+        }
         let isPlayable = asset.isPlayable
         if previewItem.isVideo, isPlayable {
             setupAVPlayerViewController(with: url)
+            shareBarButtonItem.isEnabled = true
         } else {
             if !isPlayable {
                 controllerDelegate?.previewController(self as FilePreviewController, failedToLoadRemotePreviewItem: previewItem, error: NSError(domain: "Video can't play", code: 0, userInfo: nil))
@@ -91,6 +98,7 @@ open class SingleFilePreviewController: FilePreviewController {
     
     private func updateNavigationBarAndToolbar() {
         if let navigationController = navigationController {
+            progressBar?.isHidden = !navigationController.isNavigationBarHidden
             navigationController.setNavigationBarHidden(!navigationController.isNavigationBarHidden, animated: true)
             if shouldDisplayToolbar {
                 navigationController.setToolbarHidden(!navigationController.isNavigationBarHidden, animated: true)
@@ -100,6 +108,7 @@ open class SingleFilePreviewController: FilePreviewController {
     
     private func hideNavigationBarAndToolbar() {
         if let navigationController = navigationController {
+            progressBar?.isHidden = true
             navigationController.setNavigationBarHidden(true, animated: false)
             navigationController.setToolbarHidden(true, animated: false)
         }
@@ -146,6 +155,14 @@ open class SingleFilePreviewController: FilePreviewController {
         super.willDismiss()
         releaseAVPlayerViewController()
     }
+    
+    public override func showDefaultShareActivity() {
+        guard let localURL = previewItem?.localURL else {
+            return
+        }
+        interactionController = UIDocumentInteractionController(url: localURL)
+        interactionController?.presentOptionsMenu(from: shareBarButtonItem, animated: true)
+    }
 }
 
 public extension SingleFilePreviewController {
@@ -162,11 +179,53 @@ public extension SingleFilePreviewController {
         guard let previewItem = previewItem else {
             return
         }
-        if let delegate = controllerDelegate {
-            delegate.previewController(self, willShareItem: previewItem)
+        
+        let needDownload: Bool
+        if getLocalAsset(withPreviewItem: previewItem) == nil {
+            needDownload = true
+        } else if let assetDuration = assetDuration,
+            let localAsset = getLocalAsset(withPreviewItem: previewItem),
+            assetDuration != localAsset.duration {
+            needDownload = true
         } else {
-            showDefaultShareActivity()
+            needDownload = false
         }
+        
+        if needDownload {
+            if let delegate = controllerDelegate {
+                delegate.previewController(self, willDownloadItem: previewItem)
+            }
+            downloadFor(previewItem, complete: { [weak self] error in
+                guard let strongSelf = self else {
+                    return
+                }
+                if let delegate = strongSelf.controllerDelegate {
+                    delegate.previewController(strongSelf, downloadedItem: previewItem, error: error)
+                }
+                if error == nil {
+                    strongSelf.showShareActivity()
+                }
+            })
+        } else {
+            if let delegate = controllerDelegate {
+                delegate.previewController(self, willShareItem: previewItem)
+            } else {
+                showDefaultShareActivity()
+            }
+        }
+    }
+}
+
+extension SingleFilePreviewController {
+    func getLocalAsset(withPreviewItem previewItem: FilePreviewItem) -> AVAsset? {
+        guard let previewItemURL = previewItem.previewItemURL,
+            let localFilePath = localFilePathFor(previewItemURL, fileName: previewItem.previewItemTitle, fileExtension: previewItem.fileExtension, fileKey: previewItem.fileKey) else {
+            return nil
+        }
+        if FileManager.default.fileExists(atPath: localFilePath) {
+            return AVAsset(url: URL(fileURLWithPath: localFilePath))
+        }
+        return nil
     }
 }
 

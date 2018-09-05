@@ -108,6 +108,16 @@ open class FilePreviewItem: NSObject, QLPreviewItem {
         self.fileExtension = fileExtension
         super.init()
     }
+    
+    public var localURL: URL? {
+        guard let previewItemURL = previewItemURL else {
+            return nil
+        }
+        guard let localFilePath = localFilePathFor(previewItemURL, fileName: previewItemTitle, fileExtension: fileExtension, fileKey: fileKey) else {
+            return previewItemURL
+        }
+        return URL(fileURLWithPath: localFilePath)
+    }
 }
 
 private var myContext = 0
@@ -146,7 +156,7 @@ open class FilePreviewController: QLPreviewController {
             return items?.count > 0
         }
     }
-
+    var downloadRequest: DownloadRequest?
     lazy var navigationBar: UINavigationBar? = {
         var bar: UINavigationBar?
         if let navigationBar = self.navigationController?.navigationBar {
@@ -347,7 +357,9 @@ open class FilePreviewController: QLPreviewController {
         presentingViewController?.dismissFilePreviewController()
     }
 
-    func willDismiss() {}
+    func willDismiss() {
+        downloadRequest?.cancel()
+    }
     
     func getNavigationBar(fromView view: UIView) -> UINavigationBar? {
         for v in view.subviews {
@@ -360,6 +372,13 @@ open class FilePreviewController: QLPreviewController {
             }
         }
         return nil
+    }
+    
+    public func showDefaultShareActivity() {
+        if let previewItemURL = currentPreviewItem?.previewItemURL {
+            interactionController = UIDocumentInteractionController(url: previewItemURL)
+            interactionController?.presentOptionsMenu(from: shareBarButtonItem, animated: true)
+        }
     }
 }
 
@@ -384,13 +403,6 @@ public extension FilePreviewController {
             showDefaultShareActivity()
         }
     }
-
-    public func showDefaultShareActivity() {
-        if let previewItemURL = currentPreviewItem?.previewItemURL {
-            interactionController = UIDocumentInteractionController(url: previewItemURL)
-            interactionController?.presentOptionsMenu(from: shareBarButtonItem, animated: true)
-        }
-    }
 }
 
 public extension FilePreviewController {
@@ -408,7 +420,7 @@ public extension FilePreviewController {
 }
 
 extension FilePreviewController {
-    func downloadFor(_ item: FilePreviewItem) {
+    func downloadFor(_ item: FilePreviewItem, complete: @escaping (Error?) -> Void) {
         
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         guard let previewItemUrl = item.previewItemURL, let localFilePath = localFilePathFor(previewItemUrl, fileName: item.previewItemTitle, fileExtension: item.fileExtension, fileKey: item.fileKey) else {
@@ -421,7 +433,7 @@ extension FilePreviewController {
         let destination: DownloadRequest.DownloadFileDestination = { _, _ in
             return (URL(fileURLWithPath: localFilePath), [.createIntermediateDirectories, .removePreviousFile])
         }
-        download(previewItemUrl.absoluteString, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers, to: destination).downloadProgress(queue: DispatchQueue.main) { (progress) in
+        downloadRequest = download(previewItemUrl.absoluteString, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers, to: destination).downloadProgress(queue: DispatchQueue.main) { (progress) in
             var progress = CGFloat(progress.completedUnitCount) / CGFloat(progress.totalUnitCount)
             if progress < 0 {
                 progress = 0.5
@@ -436,9 +448,8 @@ extension FilePreviewController {
                     let rasieError = FPError.errorWithCode(.remoteFileDownloadFailed, failureReason: "Download remote file failed", error: error)
                     controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: item, error: rasieError)
                 }
-            } else {
-                self.refreshCurrentPreviewItem()
             }
+            complete(response.error)
         }
     }
     
@@ -594,7 +605,14 @@ extension FilePreviewController: QLPreviewControllerDataSource {
             return copyItem
         } else {
             //Download remote file if cache not exist
-            downloadFor(originalPreviewItem)
+            downloadFor(originalPreviewItem, complete: { [weak self] error in
+                guard let strongSelf = self else {
+                    return
+                }
+                if error == nil {
+                    strongSelf.refreshCurrentPreviewItem()
+                }
+            })
         }
         copyItem.previewItemURL = nil
         return copyItem
