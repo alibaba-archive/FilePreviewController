@@ -317,7 +317,7 @@ open class FilePreviewController: QLPreviewController {
                             self.navigationBar?.superview?.layoutIfNeeded()
                             }, completion: { (_) in
                                 self.originalToolbar?.isHidden = true
-                                self.navigationBar?.superview?.sendSubview(toBack: self.navigationBar!)
+                                self.navigationBar?.superview?.sendSubviewToBack(self.navigationBar!)
                         })
                     } else if self.isFullScreen && point.y > 0 {
                         self.toolbarBottomConstraint?.constant = self.shouldDisplayToolbar ? self.toolbarBackgroundHeight : 0
@@ -329,7 +329,7 @@ open class FilePreviewController: QLPreviewController {
                         }
                         
                         DispatchQueue.main.async {
-                            self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
+                            self.navigationBar?.superview?.bringSubviewToFront(self.customNavigationBar!)
                         }
                         UIView.animate(withDuration: 0.2, animations: {
                             self.view.layoutIfNeeded()
@@ -338,7 +338,7 @@ open class FilePreviewController: QLPreviewController {
                         }, completion: { (_) in
                             self.originalToolbar?.isHidden = true
                             DispatchQueue.main.async {
-                                self.navigationBar?.superview?.bringSubview(toFront: self.customNavigationBar!)
+                                self.navigationBar?.superview?.bringSubviewToFront(self.customNavigationBar!)
                             }
                         })
                         
@@ -544,7 +544,7 @@ extension FilePreviewController {
             toolbar.tintColor = UIColor.white
         }
         if let toolbar = toolbar {
-            view.bringSubview(toFront: toolbar)
+            view.bringSubviewToFront(toolbar)
         }
     }
     

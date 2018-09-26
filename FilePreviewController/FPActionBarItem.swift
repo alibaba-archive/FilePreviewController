@@ -17,13 +17,13 @@ open class FPActionBarItem: NSObject {
     open var action: BarActionClosure?
     open weak var filePreviewController: FilePreviewController?
     
-    public init(title: String?, style: UIBarButtonItemStyle, action: BarActionClosure? = nil) {
+    public init(title: String?, style: UIBarButtonItem.Style, action: BarActionClosure? = nil) {
         super.init()
         self.action = action
         barButtonItem = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(FPActionBarItem.triggerAction))
     }
     
-    public init(image: UIImage?, style: UIBarButtonItemStyle, action: BarActionClosure? = nil) {
+    public init(image: UIImage?, style: UIBarButtonItem.Style, action: BarActionClosure? = nil) {
         super.init()
         self.action = action
         barButtonItem = UIBarButtonItem(image: image, style: style, target: self, action: #selector(FPActionBarItem.triggerAction))
@@ -44,7 +44,7 @@ open class FPActionBarItem: NSObject {
 }
 
 public extension FilePreviewController {
-    func addActionBarItem(title: String?, style: UIBarButtonItemStyle, action: BarActionClosure?) {
+    func addActionBarItem(title: String?, style: UIBarButtonItem.Style, action: BarActionClosure?) {
         let barItem = FPActionBarItem(title: title, style: style, action: action)
         barItem.filePreviewController = self
         actionItems.append(barItem)

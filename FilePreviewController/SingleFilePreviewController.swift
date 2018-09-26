@@ -82,7 +82,7 @@ open class SingleFilePreviewController: FilePreviewController {
         let avPlayerController = TBAVPlayerController(url: url)
         view.addSubview(avPlayerController.view)
         avPlayerController.view.frame = view.frame
-        addChildViewController(avPlayerController)
+        addChild(avPlayerController)
         self.avPlayerController = avPlayerController
         self.avPlayerController?.touchHandle = { [weak self] avPlayerController in
             guard let strongSelf = self, let navigationController = strongSelf.navigationController else {
@@ -145,7 +145,7 @@ open class SingleFilePreviewController: FilePreviewController {
     
     private func releaseAVPlayerViewController() {
         if let avPlayerController = avPlayerController {
-            avPlayerController.removeFromParentViewController()
+            avPlayerController.removeFromParent()
             avPlayerController.view.removeFromSuperview()
             self.avPlayerController = nil
         }
