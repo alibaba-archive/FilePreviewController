@@ -13,14 +13,14 @@ let DismissDuration = 0.3
 var AssociatedObjectHandle: UInt8 = 0
 
 public extension UIViewController {
-    public func presentFilePreviewController(viewControllerToPresent controller: UIViewController, fromView: UIView?) {
+    func presentFilePreviewController(viewControllerToPresent controller: UIViewController, fromView: UIView?) {
         let transitionDelegate = TransitionDelegate(fromView: fromView)
         controller.transitioningDelegate = transitionDelegate
         controller.fp_transitionDelegate = transitionDelegate
         present(controller, animated: true, completion: nil)
     }
     
-    public func dismissFilePreviewController() {
+    func dismissFilePreviewController() {
         if let viewController = presentedViewController {
             viewController.transitioningDelegate = viewController.fp_transitionDelegate
         }

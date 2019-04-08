@@ -37,15 +37,15 @@ public struct FilePreviewControllerConstants {
 }
 
 public extension String {
-    public func MD5() -> String {
+    func MD5() -> String {
         return (self as NSString).md5() as String
     }
     
-    public func stringByAppendingPathComponent(_ str: String) -> String {
+    func stringByAppendingPathComponent(_ str: String) -> String {
         return (self as NSString).appendingPathComponent(str)
     }
     
-    public func stringByAppendingPathExtension(_ str: String) -> String? {
+    func stringByAppendingPathExtension(_ str: String) -> String? {
         return (self as NSString).appendingPathExtension(str)
     }
 }
@@ -503,7 +503,7 @@ extension FilePreviewController {
                 toolbar.translatesAutoresizingMaskIntoConstraints = false
                 view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[toolbar]-0-|", options: [], metrics: nil , views: ["toolbar":toolbar]))
                 toolbar.addConstraint(NSLayoutConstraint(item: toolbar, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: customToolbarHeight))
-                toolbarBottomConstraint = NSLayoutConstraint(item: view, attribute: .bottom, relatedBy: .equal, toItem: toolbar, attribute: .top, multiplier: 1.0, constant: toolbarBackgroundHeight)
+                toolbarBottomConstraint = NSLayoutConstraint(item: view!, attribute: .bottom, relatedBy: .equal, toItem: toolbar, attribute: .top, multiplier: 1.0, constant: toolbarBackgroundHeight)
                 view.addConstraint(toolbarBottomConstraint!)
             }
             
