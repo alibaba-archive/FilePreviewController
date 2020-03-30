@@ -17,7 +17,7 @@ public extension UIViewController {
         let transitionDelegate = TransitionDelegate(fromView: fromView)
         controller.transitioningDelegate = transitionDelegate
         controller.fp_transitionDelegate = transitionDelegate
-        controller.modalPresentationStyle = .fullScreen
+        controller.modalPresentationStyle = .currentContext
         present(controller, animated: true, completion: nil)
     }
     
