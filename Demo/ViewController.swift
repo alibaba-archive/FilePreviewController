@@ -22,6 +22,17 @@ class ViewController: UIViewController {
         generateFileItems()
     }
     
+    @IBAction func automaticPresent(_ sender: Any) {
+        if self.presentingViewController != nil {
+            self.dismiss(animated: true, completion: nil)
+        } else {
+            let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "ViewController")
+            present(UINavigationController(rootViewController: vc), animated: true, completion: nil)
+        }
+        
+    }
+    
+    
     private func generateFileItems() {
         //jpg
         let url = URL(string: jpg)

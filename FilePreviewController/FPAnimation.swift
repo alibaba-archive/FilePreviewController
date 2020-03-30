@@ -17,7 +17,7 @@ public extension UIViewController {
         let transitionDelegate = TransitionDelegate(fromView: fromView)
         controller.transitioningDelegate = transitionDelegate
         controller.fp_transitionDelegate = transitionDelegate
-        controller.modalPresentationStyle = .currentContext
+        controller.modalPresentationStyle = .fullScreen
         present(controller, animated: true, completion: nil)
     }
     
@@ -137,7 +137,13 @@ open class DismissAnimation: NSObject, UIViewControllerAnimatedTransitioning {
         
         if let toView = toView {
             toViewController.view.frame = transitionContext.finalFrame(for: toViewController)
-            container.addSubview(toViewController.view)
+            if #available(iOS 13.0, *), toViewController.presentingViewController != nil {
+                let toVCSuperView = toViewController.view.superview
+                let destinationView: UIView! = transitionContext.view(forKey: .to) ?? toViewController.view
+                toVCSuperView?.addSubview(destinationView)
+            } else {
+                container.addSubview(toViewController.view)
+            }
             container.addSubview(fromViewController.view)
             let toFrame = container.convert(toView.frame, from: toView.superview)
             let fromFrame = transitionContext.finalFrame(for: fromViewController)
