@@ -1,6 +1,0 @@
-framework module Pods_FilePreviewController {
-  umbrella header "Pods-FilePreviewController-umbrella.h"
-
-  export *
-  module * { export * }
-}
