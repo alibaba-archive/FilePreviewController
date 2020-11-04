@@ -5,7 +5,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'FilePreviewController'
-  s.version          = '1.0.3'
+  s.version          = '1.0.4'
   s.summary          = 'Enpand QLPreviewController to support remote file preview. Use Alamofire as a dependency to load file.'
   s.description      = <<-DESC
   Enpand QLPreviewController to support remote file preview. Use Alamofire as a dependency to load file.
