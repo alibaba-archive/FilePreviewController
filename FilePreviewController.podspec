@@ -5,7 +5,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'FilePreviewController'
-  s.version          = '1.0.2'
+  s.version          = '1.0.3'
   s.summary          = 'Enpand QLPreviewController to support remote file preview. Use Alamofire as a dependency to load file.'
   s.description      = <<-DESC
   Enpand QLPreviewController to support remote file preview. Use Alamofire as a dependency to load file.
@@ -22,6 +22,6 @@ Pod::Spec.new do |s|
   s.source_files = 'FilePreviewController/*.swift', 'FilePreviewController/*.{h,m}'
   s.ios.resource_bundle = { 'Images' => 'FilePreviewController/Images.xcassets' }
 
-  s.dependency 'Alamofire', '~> 4.8'
+  s.dependency 'Alamofire', '~> 4.8.2'
 
 end
