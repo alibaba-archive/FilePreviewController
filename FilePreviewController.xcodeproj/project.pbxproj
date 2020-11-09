@@ -35,9 +35,7 @@
 		4A98E2A31C7AD94700D435BC /* NSString+MD5.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MD5.h"; sourceTree = "<group>"; };
 		4A98E2A41C7AD94700D435BC /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
 		4AA21F031C7EF2F2009727EA /* SingleFilePreviewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleFilePreviewController.swift; sourceTree = "<group>"; };
-		5F94D455CADEC4049C51E949 /* Pods-FilePreviewController.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FilePreviewController.debug.xcconfig"; path = "Target Support Files/Pods-FilePreviewController/Pods-FilePreviewController.debug.xcconfig"; sourceTree = "<group>"; };
 		863E661A1F45A427006F5EBF /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
-		A7575CDF2ACDE0D51EAEE8FD /* Pods-FilePreviewController.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FilePreviewController.release.xcconfig"; path = "Target Support Files/Pods-FilePreviewController/Pods-FilePreviewController.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,7 +56,6 @@
 				4A6BC7761C76F89300DACDA5 /* FilePreviewController */,
 				4A6BC7751C76F89300DACDA5 /* Products */,
 				863E66191F45A427006F5EBF /* Frameworks */,
-				B1843A52283DA92D7F1BA88B /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -97,16 +94,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		B1843A52283DA92D7F1BA88B /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				5F94D455CADEC4049C51E949 /* Pods-FilePreviewController.debug.xcconfig */,
-				A7575CDF2ACDE0D51EAEE8FD /* Pods-FilePreviewController.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -126,7 +113,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4A6BC77C1C76F89300DACDA5 /* Build configuration list for PBXNativeTarget "FilePreviewController" */;
 			buildPhases = (
-				E10D54305130448842748222 /* [CP] Check Pods Manifest.lock */,
 				4A6BC76F1C76F89300DACDA5 /* Sources */,
 				4A6BC7701C76F89300DACDA5 /* Frameworks */,
 				4A6BC7711C76F89300DACDA5 /* Headers */,
@@ -184,31 +170,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
-
-/* Begin PBXShellScriptBuildPhase section */
-		E10D54305130448842748222 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FilePreviewController-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		4A6BC76F1C76F89300DACDA5 /* Sources */ = {
@@ -345,7 +306,6 @@
 		};
 		4A6BC77D1C76F89300DACDA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5F94D455CADEC4049C51E949 /* Pods-FilePreviewController.debug.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
@@ -372,7 +332,6 @@
 		};
 		4A6BC77E1C76F89300DACDA5 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = A7575CDF2ACDE0D51EAEE8FD /* Pods-FilePreviewController.release.xcconfig */;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
