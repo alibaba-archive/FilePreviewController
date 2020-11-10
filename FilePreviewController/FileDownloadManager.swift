@@ -27,7 +27,7 @@ public extension String {
     }
 }
 
-class FileDownloadManager {
+public class FileDownloadManager {
     public static func localFilePathFor(_ item: FilePreviewItem) -> String? {
         guard let previewItemUrl = item.previewItemURL else {
             return nil
@@ -78,7 +78,7 @@ class FileDownloadManager {
         return cacheDirectory
     }
     
-    static func downloadFile(for item: FilePreviewItem, customReqeustHeaders: [String: String]? = nil, downloadProgress: @escaping (CGFloat) -> Void, complete: @escaping (Error?) -> Void) -> DownloadRequest? {
+    public static func downloadFile(for item: FilePreviewItem, customReqeustHeaders: [String: String]? = nil, downloadProgress: @escaping (CGFloat) -> Void, complete: @escaping (Error?) -> Void) -> DownloadRequest? {
         guard let previewItemUrl = item.previewItemURL,
             let localFilePath = FileDownloadManager.localFilePathFor(previewItemUrl, fileName: item.previewItemTitle, fileExtension: item.fileExtension, fileKey: item.fileKey) else {
                 let error = FPError.errorWithCode(.localCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")
