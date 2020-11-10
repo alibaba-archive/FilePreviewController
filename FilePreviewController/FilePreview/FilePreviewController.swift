@@ -11,7 +11,7 @@ import QuickLook
 import Alamofire
 import UIKit
 
-fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+private func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l < r
@@ -22,7 +22,7 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+private func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
     return l > r
@@ -31,101 +31,14 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   }
 }
 
-
-public struct FilePreviewControllerConstants {
-   public static let filePathComponent = "com.teambition.RemoteQuickLook"
-}
-
-public extension String {
-    func MD5() -> String {
-        return (self as NSString).md5() as String
-    }
-    
-    func stringByAppendingPathComponent(_ str: String) -> String {
-        return (self as NSString).appendingPathComponent(str)
-    }
-    
-    func stringByAppendingPathExtension(_ str: String) -> String? {
-        return (self as NSString).appendingPathExtension(str)
-    }
-}
-
-public func localFilePathFor(_ URL: Foundation.URL, fileName: String? = nil, fileExtension: String? = nil, fileKey: String?) -> String? {
-    var url = URL
-    if let fileExtension = fileExtension, url.pathExtension.count == 0 {
-        url = url.appendingPathExtension(fileExtension)
-    }
-    var saveName: String?
-    if let fileName = fileName?.replacingOccurrences(of: "/", with: ":"), let fileExtension = fileExtension {
-        saveName = fileName
-        if fileName.components(separatedBy: ".").count == 1 {
-            saveName = "\(fileName).\(fileExtension)"
-        }
-    }
-    
-    let hashedURL: String
-    if let fileKey = fileKey {
-        hashedURL = fileKey
-    } else {
-        hashedURL = URL.absoluteString.MD5()
-    }
-
-    guard var cacheDirectory = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).last else {
-        return nil
-    }
-    cacheDirectory = cacheDirectory.stringByAppendingPathComponent(FilePreviewControllerConstants.filePathComponent)
-    cacheDirectory = cacheDirectory.stringByAppendingPathComponent(hashedURL)
-    var isDirectory: ObjCBool = false
-    if !FileManager.default.fileExists(atPath: cacheDirectory, isDirectory: &isDirectory) || !isDirectory.boolValue {
-        do {
-            try FileManager.default.createDirectory(atPath: cacheDirectory, withIntermediateDirectories: true, attributes: nil)
-        } catch _{
-            return nil
-        }
-    }
-    let lastPathComponent = saveName ?? url.lastPathComponent
-    if lastPathComponent.count > 0 {
-        // add extra directory to keep original file name when share
-        cacheDirectory = cacheDirectory.stringByAppendingPathComponent(lastPathComponent)
-    }
-
-    return cacheDirectory
-}
-
-open class FilePreviewItem: NSObject, QLPreviewItem {
-    open var previewItemURL: URL?
-    open var previewItemTitle: String?
-    
-    // when fileExtension is nil, will try to get pathExtension from previewItemURL
-    open var fileExtension: String?
-    
-    open var fileKey: String?
-    
-    public init(previewItemURL: URL?, previewItemTitle: String? = nil, fileExtension: String? = nil, fileKey: String?) {
-        self.previewItemURL = previewItemURL
-        self.previewItemTitle = previewItemTitle
-        self.fileKey = fileKey
-        self.fileExtension = fileExtension
-        super.init()
-    }
-    
-    public var localURL: URL? {
-        guard let previewItemURL = previewItemURL else {
-            return nil
-        }
-        guard let localFilePath = localFilePathFor(previewItemURL, fileName: previewItemTitle, fileExtension: fileExtension, fileKey: fileKey) else {
-            return previewItemURL
-        }
-        return URL(fileURLWithPath: localFilePath)
-    }
-}
-
 private var myContext = 0
 
 open class FilePreviewController: QLPreviewController {
     
     /// if header is not nil, Alamofire will use it for authentication
     open var headers: [String: String]?
+    var downloadRequest: DownloadRequest?
+
     open var isEnableShare = true
     open var isEnableShowMore = true
     open var actionItems = [FPActionBarItem]() {
@@ -138,12 +51,14 @@ open class FilePreviewController: QLPreviewController {
             toolbarItems = actionItems.map { $0.barButtonItem }
         }
     }
+    
     override open var toolbarItems: [UIBarButtonItem]? {
         didSet {
             items = toolbarItems
         }
     }
     open var items: [UIBarButtonItem]?
+    
     fileprivate lazy var bottomProgressView: UIProgressView = {
         let progressView = UIProgressView(progressViewStyle: .bar)
         progressView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: 2)
@@ -151,12 +66,13 @@ open class FilePreviewController: QLPreviewController {
         progressView.tintColor = UIColor.blue
         return progressView
     }()
+    
     var shouldDisplayToolbar: Bool {
         get {
             return items?.count > 0
         }
     }
-    var downloadRequest: DownloadRequest?
+    
     lazy var navigationBar: UINavigationBar? = {
         var bar: UINavigationBar?
         if let navigationBar = self.navigationController?.navigationBar {
@@ -188,6 +104,7 @@ open class FilePreviewController: QLPreviewController {
         bar?.tintColor = UIColor.white
         return bar
     }()
+    
     var customNavigationBar: UIView?
     lazy var leftBarButtonItem: UIBarButtonItem = {
         let crossImage = UIImage(named: "icon-cross", in: Bundle.init(for: FilePreviewController.self), compatibleWith: nil)
@@ -243,6 +160,10 @@ open class FilePreviewController: QLPreviewController {
     
     open override var preferredStatusBarStyle : UIStatusBarStyle {
         return .default
+    }
+    
+    override open var prefersStatusBarHidden : Bool {
+        return isFullScreen
     }
 
     override open func viewWillAppear(_ animated: Bool) {
@@ -303,6 +224,15 @@ open class FilePreviewController: QLPreviewController {
         customNavigationBar?.removeFromSuperview()
     }
     
+    open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { (_) -> Void in
+            self.layoutProgressBar()
+            self.refreshCurrentPreviewItem()
+            self.navigationController?.setNavigationBarHidden(true, animated: true)
+        }, completion: nil)
+    }
+    
     override open func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if context == &myContext, let keyPath = keyPath , keyPath == "center", let object = object as? UINavigationBar , object == navigationBar {
             if let change = change {
@@ -347,10 +277,6 @@ open class FilePreviewController: QLPreviewController {
                 }
             }
         }
-    }
-
-    override open var prefersStatusBarHidden : Bool {
-        return isFullScreen
     }
     
     @objc func dismissSelf() {
@@ -405,6 +331,7 @@ public extension FilePreviewController {
     }
 }
 
+// MARK: - bottomProgressView
 public extension FilePreviewController {
     func beginUpdate() {
         if bottomProgressView.superview == nil {
@@ -419,41 +346,23 @@ public extension FilePreviewController {
     }
 }
 
+// MARK: -  Download & progressBar
 extension FilePreviewController {
     func downloadFor(_ item: FilePreviewItem, complete: @escaping (Error?) -> Void) {
-        
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
-        guard let previewItemUrl = item.previewItemURL, let localFilePath = localFilePathFor(previewItemUrl, fileName: item.previewItemTitle, fileExtension: item.fileExtension, fileKey: item.fileKey) else {
-            if let controllerDelegate = self.controllerDelegate {
-                let error = FPError.errorWithCode(.localCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")
-                controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: item, error: error)
-            }
-            return
-        }
-        let destination: DownloadRequest.DownloadFileDestination = { _, _ in
-            return (URL(fileURLWithPath: localFilePath), [.createIntermediateDirectories, .removePreviousFile])
-        }
-        downloadRequest = download(previewItemUrl.absoluteString, method: .get, parameters: nil, encoding: JSONEncoding.default, headers: headers, to: destination).downloadProgress(queue: DispatchQueue.main) { (progress) in
-            var progress = CGFloat(progress.completedUnitCount) / CGFloat(progress.totalUnitCount)
-            if progress < 0 {
-                progress = 0.5
-            }
+        downloadRequest = FileDownloadManager.downloadFile(for: item, customReqeustHeaders: headers, downloadProgress: { (progress) in
             self.updateProgress(progress)
-        }
-        .response { response in
+        }) { (downloadError) in
             UIApplication.shared.isNetworkActivityIndicatorVisible = false
             self.cancelProgress()
-            if let error = response.error {
-                if let controllerDelegate = self.controllerDelegate {
-                    let rasieError = FPError.errorWithCode(.remoteFileDownloadFailed, failureReason: "Download remote file failed", error: error)
-                    controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: item, error: rasieError)
-                }
+            if let error = downloadError,let controllerDelegate = self.controllerDelegate {
+                controllerDelegate.previewController(self, failedToLoadRemotePreviewItem: item, error: error as NSError)
             }
-            complete(response.error)
+            complete(downloadError)
         }
     }
     
-    func updateProgress(_ newProgress: CGFloat) {
+     private func updateProgress(_ newProgress: CGFloat) {
         if progressBar == nil {
             progressBar = UIProgressView(progressViewStyle: .bar)
             progressBar?.progress = 0.1
@@ -469,7 +378,7 @@ extension FilePreviewController {
         progressBar.progress = Float(newProgress)
     }
     
-    func cancelProgress() {
+    private func cancelProgress() {
         guard let progressBar = progressBar else {
             return
         }
@@ -480,7 +389,7 @@ extension FilePreviewController {
         })
     }
     
-    func layoutProgressBar() {
+    private func layoutProgressBar() {
         guard let navigationBar = customNavigationBar, let progressBar = progressBar else {
             return
         }
@@ -494,7 +403,7 @@ extension FilePreviewController {
         progressBar.frame = CGRect(x: 0, y: navigationBarHeight - progressBarHeight, width: navigationBarWidth, height: progressBarHeight)
     }
     
-    func layoutToolbar() {
+    private func layoutToolbar() {
         originalToolbar?.isHidden = true
         if toolbar == nil {
             toolbar = UIToolbar()
@@ -547,20 +456,10 @@ extension FilePreviewController {
             view.bringSubviewToFront(toolbar)
         }
     }
-    
-    open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        coordinator.animate(alongsideTransition: { (_) -> Void in
-            self.layoutProgressBar()
-            self.refreshCurrentPreviewItem()
-            self.navigationController?.setNavigationBarHidden(true, animated: true)
-        }, completion: nil)
-    }
 }
 
+// MARK: - QLPreviewControllerDataSource
 extension FilePreviewController: QLPreviewControllerDataSource {
-    
-    //This method is required to expose, don't call it
     public func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
         guard let originalDataSource = originalDataSource else {
             return 0
@@ -568,9 +467,7 @@ extension FilePreviewController: QLPreviewControllerDataSource {
         return originalDataSource.numberOfPreviewItems(in: controller)
     }
     
-    //This method is required to expose, don't call it
     public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-        
         let originalPreviewItem = (originalDataSource!.previewController(controller, previewItemAt: index)) as! FilePreviewItem
         
         guard let previewItemURL = originalPreviewItem.previewItemURL else {
@@ -582,7 +479,6 @@ extension FilePreviewController: QLPreviewControllerDataSource {
         }
         
         //If it's a remote file, check cache
-        
         var copyItem: FilePreviewItem!
         if let itemTitle = originalPreviewItem.previewItemTitle {
             copyItem = FilePreviewItem(previewItemURL: originalPreviewItem.previewItemURL, previewItemTitle: itemTitle, fileKey: originalPreviewItem.fileKey)
@@ -590,7 +486,7 @@ extension FilePreviewController: QLPreviewControllerDataSource {
             copyItem = FilePreviewItem(previewItemURL: originalPreviewItem.previewItemURL, fileKey: originalPreviewItem.fileKey)
         }
         
-        guard let localFilePath = localFilePathFor(previewItemURL, fileName: originalPreviewItem.previewItemTitle, fileExtension: originalPreviewItem.fileExtension, fileKey: originalPreviewItem.fileKey) else {
+        guard let localFilePath = FileDownloadManager.localFilePathFor(previewItemURL, fileName: originalPreviewItem.previewItemTitle, fileExtension: originalPreviewItem.fileExtension, fileKey: originalPreviewItem.fileKey) else {
             //failed to get local file path
             if let controllerDelegate = self.controllerDelegate {
                 let error = FPError.errorWithCode(.localCacheDirectoryCreateFailed, failureReason: "Create cache directory failed")

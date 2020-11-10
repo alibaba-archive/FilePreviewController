@@ -219,7 +219,7 @@ public extension SingleFilePreviewController {
 extension SingleFilePreviewController {
     func getLocalAsset(withPreviewItem previewItem: FilePreviewItem) -> AVAsset? {
         guard let previewItemURL = previewItem.previewItemURL,
-            let localFilePath = localFilePathFor(previewItemURL, fileName: previewItem.previewItemTitle, fileExtension: previewItem.fileExtension, fileKey: previewItem.fileKey) else {
+            let localFilePath = FileDownloadManager.localFilePathFor(previewItemURL, fileName: previewItem.previewItemTitle, fileExtension: previewItem.fileExtension, fileKey: previewItem.fileKey) else {
             return nil
         }
         if FileManager.default.fileExists(atPath: localFilePath) {

@@ -19,6 +19,8 @@
 		4A98E2A61C7AD94700D435BC /* NSString+MD5.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A98E2A41C7AD94700D435BC /* NSString+MD5.m */; };
 		4AA21F041C7EF2F2009727EA /* SingleFilePreviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA21F031C7EF2F2009727EA /* SingleFilePreviewController.swift */; };
 		863E661B1F45A427006F5EBF /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 863E661A1F45A427006F5EBF /* Alamofire.framework */; };
+		F0419291255A667D00037CF1 /* FilePreviewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0419290255A667D00037CF1 /* FilePreviewItem.swift */; };
+		F0419293255A68C000037CF1 /* FileDownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0419292255A68C000037CF1 /* FileDownloadManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +38,8 @@
 		4A98E2A41C7AD94700D435BC /* NSString+MD5.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MD5.m"; sourceTree = "<group>"; };
 		4AA21F031C7EF2F2009727EA /* SingleFilePreviewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SingleFilePreviewController.swift; sourceTree = "<group>"; };
 		863E661A1F45A427006F5EBF /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		F0419290255A667D00037CF1 /* FilePreviewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePreviewItem.swift; sourceTree = "<group>"; };
+		F0419292255A68C000037CF1 /* FileDownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileDownloadManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,15 +75,12 @@
 			isa = PBXGroup;
 			children = (
 				4A6BC7771C76F89300DACDA5 /* FilePreviewController.h */,
-				4A98E29D1C7AD4F500D435BC /* FilePreviewController.swift */,
-				4AA21F031C7EF2F2009727EA /* SingleFilePreviewController.swift */,
-				4A783B901CA9100200B49092 /* FPAnimation.swift */,
-				4A72028F1CF085F000EF8191 /* FPActionBarItem.swift */,
-				4A783B991CAA49E100B49092 /* FPCustomView.swift */,
-				4A79BA2F1D65645D001B3681 /* FilePreviewControllerDelegate.swift */,
+				F0419290255A667D00037CF1 /* FilePreviewItem.swift */,
+				F0419292255A68C000037CF1 /* FileDownloadManager.swift */,
 				4A098D4A1C85960E0067270D /* Error.swift */,
 				4A98E2A31C7AD94700D435BC /* NSString+MD5.h */,
 				4A98E2A41C7AD94700D435BC /* NSString+MD5.m */,
+				F0419294255A6B5D00037CF1 /* FilePreview */,
 				4A6BC7791C76F89300DACDA5 /* Info.plist */,
 				4A783B921CAA29BC00B49092 /* Images.xcassets */,
 			);
@@ -92,6 +93,19 @@
 				863E661A1F45A427006F5EBF /* Alamofire.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F0419294255A6B5D00037CF1 /* FilePreview */ = {
+			isa = PBXGroup;
+			children = (
+				4A98E29D1C7AD4F500D435BC /* FilePreviewController.swift */,
+				4A79BA2F1D65645D001B3681 /* FilePreviewControllerDelegate.swift */,
+				4AA21F031C7EF2F2009727EA /* SingleFilePreviewController.swift */,
+				4A783B901CA9100200B49092 /* FPAnimation.swift */,
+				4A72028F1CF085F000EF8191 /* FPActionBarItem.swift */,
+				4A783B991CAA49E100B49092 /* FPCustomView.swift */,
+			);
+			path = FilePreview;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -177,8 +191,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A783B911CA9100200B49092 /* FPAnimation.swift in Sources */,
+				F0419293255A68C000037CF1 /* FileDownloadManager.swift in Sources */,
 				4A098D4B1C85960E0067270D /* Error.swift in Sources */,
 				4A7202901CF085F000EF8191 /* FPActionBarItem.swift in Sources */,
+				F0419291255A667D00037CF1 /* FilePreviewItem.swift in Sources */,
 				4AA21F041C7EF2F2009727EA /* SingleFilePreviewController.swift in Sources */,
 				4A783B9A1CAA49E100B49092 /* FPCustomView.swift in Sources */,
 				4A98E2A61C7AD94700D435BC /* NSString+MD5.m in Sources */,
